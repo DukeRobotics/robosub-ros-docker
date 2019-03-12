@@ -1,5 +1,8 @@
 FROM osrf/ros:kinetic-desktop-full-xenial
 
+### Arguments ###
+ARG USERNAME=duke
+ARG PASSWORD=robotics
 
 ### Basic Setup ###
 
@@ -20,11 +23,11 @@ RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
 ### User Settings ###
 
 # Create default user
-RUN adduser --disabled-password --gecos "" duke
-RUN echo "duke:robotics" | chpasswd
+RUN adduser --disabled-password --gecos "" $USERNAME
+RUN echo $USERNAME":"$PASSWORD | chpasswd
 
 # Add user to sudo and the dialout group to allow /dev access
-RUN usermod -aG sudo,dialout duke
+RUN usermod -aG sudo,dialout $USERNAME
 
 
 
@@ -72,9 +75,9 @@ RUN curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
 RUN sudo apt-get install -y nodejs
 
 # Clone gzweb
-RUN cd ~; \
+RUN cd /home/$USERNAME; \
     hg clone https://bitbucket.org/osrf/gzweb; \
-    cd ~/gzweb; \
+    cd gzweb; \
     hg up gzweb_1.4.0; \
     source /usr/share/gazebo/setup.sh; \
     npm run deploy --- -m
