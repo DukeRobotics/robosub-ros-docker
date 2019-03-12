@@ -8,10 +8,11 @@ RUN apt-get update && apt-get install -y \
 	openssh-server \
 	x11-apps \
 	vim \
+	curl \
 	sudo
 
 # Set up locales
-RUN apt install -y locales
+RUN apt-get install -y locales
 RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
 
 
@@ -36,8 +37,49 @@ RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config
 RUN sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
 
 
-#clear apt caches to reduce image size
+# Clear apt caches to reduce image size
 RUN rm -rf /var/lib/apt/lists/*
 
 
-ENTRYPOINT service ssh restart && bash
+
+### Gazebo setup ###
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    libsdformat4 \
+    gazebo7 \
+    gazebo7-plugin-base \
+    libignition-math2 \
+    libignition-math2-dev \
+    libsdformat4-dev \
+    libgazebo7 \
+    libgazebo7-dev
+
+RUN apt-get update && apt-get install -y \
+    libjansson-dev \
+    nodejs \
+    npm \
+    nodejs-legacy \
+    libboost-dev \
+    imagemagick \
+    libtinyxml-dev \
+    mercurial \
+    cmake \
+    build-essential
+
+# Upgrade node
+RUN curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+RUN sudo apt-get install -y nodejs
+
+# Clone gzweb
+RUN cd ~; \
+    hg clone https://bitbucket.org/osrf/gzweb; \
+    cd ~/gzweb; \
+    hg up gzweb_1.4.0; \
+    source /usr/share/gazebo/setup.sh; \
+    npm run deploy --- -m
+
+
+COPY entrypoint.sh entrypoint.sh
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ./entrypoint.sh
