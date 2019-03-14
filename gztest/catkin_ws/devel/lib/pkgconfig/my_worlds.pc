@@ -1,0 +1,8 @@
+prefix=/home/duke/gztest/catkin_ws/devel
+
+Name: my_worlds
+Description: Description of my_worlds
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/duke/gztest/catkin_ws/devel/lib 
+Requires: 
