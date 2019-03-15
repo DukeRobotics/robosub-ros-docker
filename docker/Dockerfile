@@ -3,8 +3,13 @@ FROM osrf/ros:kinetic-desktop-full-xenial
 ### Arguments ###
 ARG USERNAME=duke
 ARG PASSWORD=robotics
+ARG BUILD_DIR_NAME=docker-build
+ARG WORKDIR=/tmp/$BUILD_DIR_NAME
 
 ### Basic Setup ###
+
+# Set the workdir
+WORKDIR $WORKDIR
 
 # Update and install tools
 RUN apt-get update && apt-get install -y \
@@ -75,12 +80,29 @@ RUN curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
 RUN sudo apt-get install -y nodejs
 
 # Clone gzweb
-RUN cd /home/$USERNAME; \
-    hg clone https://bitbucket.org/osrf/gzweb; \
+RUN hg clone https://bitbucket.org/osrf/gzweb; \
     cd gzweb; \
     hg up gzweb_1.4.0; \
     source /usr/share/gazebo/setup.sh; \
     npm run deploy --- -m
+
+
+
+### SITL Stuff ###
+
+# Get the SITL
+RUN git clone https://github.com/ArduPilot/ardupilot.git
+RUN cd ardupilot; \
+    git submodule update --init --recursive; \
+    sed -i "s/sudo usermod -a -G dialout \$USER/sudo usermod -a -G dialout $USERNAME/" Tools/scripts/install-prereqs-ubuntu.sh; \
+    Tools/scripts/install-prereqs-ubuntu.sh -y
+
+
+
+### Final Setup ###
+
+# Move everything from the workdir to the user's home folder
+RUN mv $WORKDIR /home/$USERNAME/$BUILD_DIR_NAME
 
 
 COPY entrypoint.sh entrypoint.sh
