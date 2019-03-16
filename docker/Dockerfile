@@ -4,12 +4,8 @@ FROM osrf/ros:kinetic-desktop-full-xenial
 ARG USERNAME=duke
 ARG PASSWORD=robotics
 ARG BUILD_DIR_NAME=docker-build
-ARG WORKDIR=/tmp/$BUILD_DIR_NAME
 
 ### Basic Setup ###
-
-# Set the workdir
-WORKDIR $WORKDIR
 
 # Update and install tools
 RUN apt-get update && apt-get install -y \
@@ -24,7 +20,6 @@ RUN apt-get install -y locales
 RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
 
 
-
 ### User Settings ###
 
 # Create default user
@@ -34,6 +29,9 @@ RUN echo $USERNAME":"$PASSWORD | chpasswd
 # Add user to sudo and the dialout group to allow /dev access
 RUN usermod -aG sudo,dialout $USERNAME
 
+
+# Set the workdir after creating user #
+WORKDIR /home/$USERNAME/$BUILD_DIR_NAME
 
 
 ### SSH Settings ###
@@ -90,20 +88,30 @@ RUN hg clone https://bitbucket.org/osrf/gzweb; \
 
 ### SITL Stuff ###
 
-# Get the SITL
-RUN git clone https://github.com/ArduPilot/ardupilot.git
-RUN cd ardupilot; \
+# Get and build the SITL
+RUN git clone https://github.com/ArduPilot/ardupilot.git; \
+    cd ardupilot; \
     git submodule update --init --recursive; \
     sed -i "s/sudo usermod -a -G dialout \$USER/sudo usermod -a -G dialout $USERNAME/" Tools/scripts/install-prereqs-ubuntu.sh; \
-    Tools/scripts/install-prereqs-ubuntu.sh -y
+    sed -i "s/pip2 -q install --user -U \$PYTHON_PKGS/pip2 -q install -U \$PYTHON_PKGS/" Tools/scripts/install-prereqs-ubuntu.sh; \
+    Tools/scripts/install-prereqs-ubuntu.sh -y; \
+    . ~/.profile; \
+    ./waf configure --board sitl; \
+    ./waf sub
+
+# Get freebuoyancy plugin for gazebo
+RUN git clone https://github.com/bluerobotics/freebuoyancy_gazebo; \
+    cd freebuoyancy_gazebo; \
+    mkdir build; \
+    cd build; \
+    cmake ..; \
+    make; \
+    sudo make install;
+
 
 
 
 ### Final Setup ###
-
-# Move everything from the workdir to the user's home folder
-RUN mv $WORKDIR /home/$USERNAME/$BUILD_DIR_NAME
-
 
 COPY entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
