@@ -4,6 +4,7 @@ FROM osrf/ros:kinetic-desktop-full-xenial
 ARG USERNAME=duke
 ARG PASSWORD=robotics
 ARG BUILD_DIR_NAME=docker-build
+ARG WORKDIR=/home/$USERNAME/$BUILD_DIR_NAME
 
 ### Basic Setup ###
 
@@ -31,7 +32,7 @@ RUN usermod -aG sudo,dialout $USERNAME
 
 
 # Set the workdir after creating user #
-WORKDIR /home/$USERNAME/$BUILD_DIR_NAME
+WORKDIR $WORKDIR
 
 
 ### SSH Settings ###
@@ -106,13 +107,27 @@ RUN git clone https://github.com/bluerobotics/freebuoyancy_gazebo; \
     cd build; \
     cmake ..; \
     make; \
-    sudo make install;
+    sudo make install
 
+# Get ardupilot plugin for gazebo
+RUN git clone https://github.com/patrickelectric/ardupilot_gazebo; \
+    cd ardupilot_gazebo; \
+    git checkout add_link; \
+    mkdir build; \
+    cd build; \
+    cmake ..; \
+    make -j4; \
+    sudo make install
 
 
 
 ### Final Setup ###
 
+# Change owner and group to user on installed files
+RUN chown --recursive $USERNAME $WORKDIR; \
+    chgrp --recursive $USERNAME $WORKDIR
+
+# Copy and set entrypoint script
 COPY entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ./entrypoint.sh
