@@ -48,6 +48,11 @@ RUN sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
 RUN rm -rf /var/lib/apt/lists/*
 
 
+### ROS Plugins ###
+
+## mavros ##
+
+
 
 ### Gazebo setup ###
 
@@ -107,7 +112,8 @@ RUN git clone https://github.com/bluerobotics/freebuoyancy_gazebo; \
     cd build; \
     cmake ..; \
     make; \
-    sudo make install
+    sudo make install; \
+    sudo cp -a /usr/lib/x86_64-linux-gnu/gazebo-7.0/plugins/ /usr/lib/x86_64-linux-gnu/gazebo-7/
 
 # Get ardupilot plugin for gazebo
 RUN git clone https://github.com/patrickelectric/ardupilot_gazebo; \
@@ -116,11 +122,11 @@ RUN git clone https://github.com/patrickelectric/ardupilot_gazebo; \
     mkdir build; \
     cd build; \
     cmake ..; \
-    make -j4; \
+    make; \
     sudo make install
 
 # Get bluerov_ros_playground
-#RUN git clone https://github.com/patrickelectric/bluerov_ros_playground
+RUN git clone https://github.com/patrickelectric/bluerov_ros_playground
 
 
 
