@@ -119,6 +119,9 @@ RUN git clone https://github.com/patrickelectric/ardupilot_gazebo; \
     make -j4; \
     sudo make install
 
+# Get bluerov_ros_playground
+#RUN git clone https://github.com/patrickelectric/bluerov_ros_playground
+
 
 
 ### Final Setup ###
