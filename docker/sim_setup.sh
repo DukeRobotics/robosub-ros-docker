@@ -1,6 +1,6 @@
 # Set up environment variables for simulation
 
-base_dir=~/docker-build
+base_dir=$1
 
 # Source gazebo setup
 source /usr/share/gazebo/setup.sh
