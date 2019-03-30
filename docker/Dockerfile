@@ -26,7 +26,8 @@ RUN apt-get update && apt-get install -y \
 	x11-apps \
 	vim \
 	curl \
-	sudo
+	sudo \
+	python-catkin-tools
 
 # Set up locales
 RUN apt-get install -y locales
