@@ -11,7 +11,7 @@ docker pull miron003/robosub-ros
 
 2. Run a container
 ```bash
-docker run -td --mount type=bind,source=/path/to/source/on/computer,target=/home/duke/dev/robosub-ros -p 127.0.0.1:2200:22 miron003/robosub-ros
+docker run -td -p 127.0.0.1:2200:22 --mount type=bind,source=/path/to/src,target=/home/duke/dev/robosub-ros/src  miron003/robosub-ros
 ```
 
 #### Notes
@@ -23,6 +23,10 @@ docker run -td --mount type=bind,source=/path/to/source/on/computer,target=/home
 
 * -p 127.0.0.1:2200:22
   * Forward port 22 on the container to port 2200 on user's computer
+
+* --mount type=bind,source=/path/to/src,target=/home/duke/dev/robosub-ros/src
+  * Create a binding between a folder on the user's computer to a folder inside the container
+    * All files in src on user's computer will be mirrored to src inside container, i.e. changes made on user's computer will occur inside the container, and vice versa
 
 * --privileged
   * Run the container in privileged mode, allowing access to /dev
