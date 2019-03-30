@@ -131,8 +131,9 @@ RUN git clone https://github.com/patrickelectric/bluerov_ros_playground
 
 # mavros
 RUN apt-get update; \
-    sudo apt-get install ros-kinetic-mavros ros-kinetic-mavros-extras; \
+    apt-get install -y ros-kinetic-mavros ros-kinetic-mavros-extras; \
     wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/install_geographiclib_datasets.sh; \
+    chmod +x install_geographiclib_datasets.sh; \
     ./install_geographiclib_datasets.sh	
 
 
