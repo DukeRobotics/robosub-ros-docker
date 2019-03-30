@@ -11,7 +11,7 @@ docker pull miron003/robosub-ros
 
 2. Run a container
 ```bash
-docker run -td -p 127.0.0.1:2200:22 --mount type=bind,source=/PATH/TO/SRC,target=/home/duke/dev/robosub-ros/src  miron003/robosub-ros
+docker run -td -p 2200:2200 --mount type=bind,source=/PATH/TO/SRC,target=/home/duke/dev/robosub-ros/src  miron003/robosub-ros
 ```
 
 #### Notes
@@ -21,7 +21,7 @@ docker run -td -p 127.0.0.1:2200:22 --mount type=bind,source=/PATH/TO/SRC,target
 * -d
   * Start the container in the background
 
-* -p 127.0.0.1:2200:22
+* -p 2200:2200
   * Forward port 22 on the container to port 2200 on user's computer
 
 * --mount type=bind,source=/path/to/src,target=/home/duke/dev/robosub-ros/src
