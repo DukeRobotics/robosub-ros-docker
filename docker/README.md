@@ -19,7 +19,7 @@ docker run -td -p 2200:2200 --mount type=bind,source=/PATH/TO/SRC,target=/home/d
 ssh -XY -p 2200 duke@localhost
 ```
 
-#### Notes
+#### Run a container notes
 * -t
   * Allocate a bash shell inside the container
 
@@ -38,13 +38,8 @@ ssh -XY -p 2200 duke@localhost
   * Use this flag if you need to connect to USB devices
 
 
-* -XY
-  * Forward graphics over ssh connections
-
-* -p 2200
-  * ssh to port 2200, instead of the default port 22
   
-#### Step 2 Examples
+#### Run a container examples
 * Windows
 ```bash
 docker run -td -p 2200:2200 --mount type=bind,source=C:\Users\Eric\Documents\Robotics\CS,target=/home/duke/dev/robosub-ros/src  miron003/robosub-ros
@@ -53,6 +48,13 @@ docker run -td -p 2200:2200 --mount type=bind,source=C:\Users\Eric\Documents\Rob
 * Mac
 ```bash
 ```
+  
+#### Connect to a container notes
+* -XY
+  * Forward graphics over ssh connections
+
+* -p 2200
+  * ssh to port 2200, instead of the default port 22
   
 ## Building
 
