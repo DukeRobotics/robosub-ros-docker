@@ -137,6 +137,9 @@ RUN apt-get update; \
     chmod +x install_geographiclib_datasets.sh; \
     ./install_geographiclib_datasets.sh	
 
+# Underwater sensor messages (DVL and Pressure)
+RUN apt-get install -y ros-kinetic-underwater-sensor-msgs
+
 
 
 ### Final Setup ###
