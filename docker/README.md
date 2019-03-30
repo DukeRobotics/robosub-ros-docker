@@ -14,7 +14,7 @@ docker pull miron003/robosub-ros
 docker run -td --mount type=bind,source=/path/to/source/on/computer,target=/home/duke/dev/robosub-ros -p 127.0.0.1:2200:22 miron003/robosub-ros
 ```
 
-##### Notes
+#### Notes
 * -t
   * Allocate a bash shell inside the container
 
@@ -33,7 +33,7 @@ docker run -td --mount type=bind,source=/path/to/source/on/computer,target=/home
 ssh -p 2200 duke@localhost
 ```
 
-##### Notes
+#### Notes
 * -p 2200
   * ssh to port 2200, instead of the default port 22
 
