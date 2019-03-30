@@ -30,10 +30,13 @@ docker run -td --mount type=bind,source=/path/to/source/on/computer,target=/home
 
 3. Connect to the container
 ```bash
-ssh -p 2200 duke@localhost
+ssh -XY -p 2200 duke@localhost
 ```
 
 #### Notes
+* -XY
+  * Forward graphics over ssh connections
+
 * -p 2200
   * ssh to port 2200, instead of the default port 22
 
