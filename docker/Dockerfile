@@ -51,126 +51,97 @@ RUN rm -rf /var/lib/apt/lists/*
 
 
 
-### ROS Plugins ###
-
-## mavros ##
-
-# Get tools
-RUN apt-get update && apt-get install -y \
-    python-catkin-tools \
-    python-rosinstall-generator
-
-# Setup workspace to build from
-RUN mkdir -p catkin_ws_docker/src; \
-    cd catkin_ws_docker; \
-    catkin init; \
-    wstool init src
-
-# Add custom pressure sensor code to mavros
-COPY pressure_sensor.cpp catkin_ws_docker/src/mavros/mavros_extras/src/plugins/pressure_sensor.cpp
-COPY pressure_plugin_declaration.xml pressure_plugin_declaration.xml
-
-# Install mavros and dependencies, and update mavroe_plugins to include the pressure sensor
-RUN cd catkin_ws_docker; \
-    /bin/bash -c "source /opt/ros/kinetic/setup.bash"; \
-    rosinstall_generator --rosdistro kinetic mavlink | tee /tmp/mavros.rosinstall; \
-    rosinstall_generator --upstream mavros | tee -a /tmp/mavros.rosinstall; \
-    wstool merge -t src /tmp/mavros.rosinstall; \
-    wstool update --delete-changed-uris -t src; \
-			  \
-    sed -i "s/<\/library>//" src/mavros/mavros_extras/mavros_plugins.xml; \
-    cat ../pressure_plugin_declaration.xml >> src/mavros/mavros_extras/mavros_plugins.xml; \
-    echo "</library>" >> src/mavros/mavros_extras/mavros_plugins.xml; \
-    								      \
-    rosdep install --from-paths src --ignore-src -y; \
-    ./src/mavros/mavros/scripts/install_geographiclib_datasets.sh; \
-    catkin config --extend /opt/ros/kinetic; \
-    catkin build
-
-    
-
-
 ### Gazebo setup ###
 
 # Install dependencies
-#RUN apt-get update && apt-get install -y \
-#    libsdformat4 \
-#    gazebo7 \
-#    gazebo7-plugin-base \
-#    libignition-math2 \
-#    libignition-math2-dev \
-#    libsdformat4-dev \
-#    libgazebo7 \
-#    libgazebo7-dev
-#
-#RUN apt-get update && apt-get install -y \
-#    libjansson-dev \
-#    nodejs \
-#    npm \
-#    nodejs-legacy \
-#    libboost-dev \
-#    imagemagick \
-#    libtinyxml-dev \
-#    mercurial \
-#    cmake \
-#    build-essential
-#
-## Upgrade node
-#RUN curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
-#RUN sudo apt-get install -y nodejs
-#
-## Clone gzweb
-#RUN hg clone https://bitbucket.org/osrf/gzweb; \
-#    cd gzweb; \
-#    hg up gzweb_1.4.0; \
-#    source /usr/share/gazebo/setup.sh; \
-#    npm run deploy --- -m
-#
-#
-#
-#### SITL Installation ###
-#
-## Get and build the SITL
-#RUN git clone https://github.com/ArduPilot/ardupilot.git; \
-#    cd ardupilot; \
-#    git submodule update --init --recursive; \
-#    sed -i "s/sudo usermod -a -G dialout \$USER/sudo usermod -a -G dialout $USERNAME/" Tools/scripts/install-prereqs-ubuntu.sh; \
-#    sed -i "s/pip2 -q install --user -U \$PYTHON_PKGS/pip2 -q install -U \$PYTHON_PKGS/" Tools/scripts/install-prereqs-ubuntu.sh; \
-#    Tools/scripts/install-prereqs-ubuntu.sh -y; \
-#    . ~/.profile; \
-#    ./waf configure --board sitl; \
-#    ./waf sub
-#
-## Get freebuoyancy plugin for gazebo
-#RUN git clone https://github.com/bluerobotics/freebuoyancy_gazebo; \
-#    cd freebuoyancy_gazebo; \
-#    mkdir build; \
-#    cd build; \
-#    cmake ..; \
-#    make; \
-#    sudo make install; \
-#    sudo cp -a /usr/lib/x86_64-linux-gnu/gazebo-7.0/plugins/ /usr/lib/x86_64-linux-gnu/gazebo-7/
-#
-## Get ardupilot plugin for gazebo
-#RUN git clone https://github.com/patrickelectric/ardupilot_gazebo; \
-#    cd ardupilot_gazebo; \
-#    git checkout add_link; \
-#    mkdir build; \
-#    cd build; \
-#    cmake ..; \
-#    make; \
-#    sudo make install
-#
-## Get bluerov_ros_playground
-#RUN git clone https://github.com/patrickelectric/bluerov_ros_playground
-#
-#
+RUN apt-get update && apt-get install -y \
+    libsdformat4 \
+    gazebo7 \
+    gazebo7-plugin-base \
+    libignition-math2 \
+    libignition-math2-dev \
+    libsdformat4-dev \
+    libgazebo7 \
+    libgazebo7-dev
+
+RUN apt-get update && apt-get install -y \
+    libjansson-dev \
+    nodejs \
+    npm \
+    nodejs-legacy \
+    libboost-dev \
+    imagemagick \
+    libtinyxml-dev \
+    mercurial \
+    cmake \
+    build-essential
+
+# Upgrade node
+RUN curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+RUN sudo apt-get install -y nodejs
+
+# Clone gzweb
+RUN hg clone https://bitbucket.org/osrf/gzweb; \
+    cd gzweb; \
+    hg up gzweb_1.4.0; \
+    /bin/bash -c "source /usr/share/gazebo/setup.sh"; \
+    npm run deploy --- -m
+
+
+
+### SITL Installation ###
+
+# Get and build the SITL
+RUN git clone https://github.com/ArduPilot/ardupilot.git; \
+    cd ardupilot; \
+    git submodule update --init --recursive; \
+    sed -i "s/sudo usermod -a -G dialout \$USER/sudo usermod -a -G dialout $USERNAME/" Tools/scripts/install-prereqs-ubuntu.sh; \
+    sed -i "s/pip2 -q install --user -U \$PYTHON_PKGS/pip2 -q install -U \$PYTHON_PKGS/" Tools/scripts/install-prereqs-ubuntu.sh; \
+    Tools/scripts/install-prereqs-ubuntu.sh -y; \
+    . ~/.profile; \
+    ./waf configure --board sitl; \
+    ./waf sub
+
+# Get freebuoyancy plugin for gazebo
+RUN git clone https://github.com/bluerobotics/freebuoyancy_gazebo; \
+    cd freebuoyancy_gazebo; \
+    mkdir build; \
+    cd build; \
+    cmake ..; \
+    make; \
+    sudo make install; \
+    sudo cp -a /usr/lib/x86_64-linux-gnu/gazebo-7.0/plugins/ /usr/lib/x86_64-linux-gnu/gazebo-7/
+
+# Get ardupilot plugin for gazebo
+RUN git clone https://github.com/patrickelectric/ardupilot_gazebo; \
+    cd ardupilot_gazebo; \
+    git checkout add_link; \
+    mkdir build; \
+    cd build; \
+    cmake ..; \
+    make; \
+    sudo make install; \
+    sudo cp -a /usr/lib/x86_64-linux-gnu/gazebo-7.0/plugins/ /usr/lib/x86_64-linux-gnu/gazebo-7/
+
+# Get bluerov_ros_playground
+RUN git clone https://github.com/patrickelectric/bluerov_ros_playground
+
+
+### ROS Plugins ###
+
+# mavros
+RUN apt-get update; \
+    sudo apt-get install ros-kinetic-mavros ros-kinetic-mavros-extras; \
+    wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/install_geographiclib_datasets.sh; \
+    ./install_geographiclib_datasets.sh	
+
+
 
 ### Final Setup ###
 
 # Change owner and group to user on installed files
-#RUN chown --recursive $USERNAME $WORKDIR; \
-#    chgrp --recursive $USERNAME $WORKDIR
+RUN chown --recursive $USERNAME $WORKDIR; \
+    chgrp --recursive $USERNAME $WORKDIR
 
 # Copy and set entrypoint script
 COPY entrypoint.sh entrypoint.sh
