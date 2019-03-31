@@ -1,8 +1,0 @@
-prefix=/home/duke/gztest/catkin_ws/install
-
-Name: m2wr_description
-Description: Description of m2wr_description
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/duke/gztest/catkin_ws/install/lib 
-Requires: 

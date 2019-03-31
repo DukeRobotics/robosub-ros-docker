@@ -1,2 +1,0 @@
-gazebo-testing:two-wheeled-robot-simulation/m2wr_description:two-wheeled-robot-simulation/my_worlds
--DCATKIN_DEVEL_PREFIX=/home/duke/gztest/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/duke/gztest/catkin_ws/install -G Unix Makefiles

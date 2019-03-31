@@ -1,8 +1,0 @@
-prefix=/home/duke/gztest/catkin_ws/devel
-
-Name: gazebo-testing
-Description: Description of gazebo-testing
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/duke/gztest/catkin_ws/devel/lib 
-Requires: 
