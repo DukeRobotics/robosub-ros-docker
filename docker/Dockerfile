@@ -148,6 +148,9 @@ RUN apt-get install -y ros-kinetic-underwater-sensor-msgs
 RUN chown --recursive $USERNAME $WORKDIR; \
     chgrp --recursive $USERNAME $WORKDIR
 
+# Add catkin workspace
+RUN mkdir -p /home/$USERNAME/dev/robosub-ros/catkin_ws/src
+
 # Copy and set entrypoint script
 COPY entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
