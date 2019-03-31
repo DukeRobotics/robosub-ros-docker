@@ -149,7 +149,9 @@ RUN chown --recursive $USERNAME $WORKDIR; \
     chgrp --recursive $USERNAME $WORKDIR
 
 # Add catkin workspace
-RUN mkdir -p /home/$USERNAME/dev/robosub-ros/catkin_ws/src
+RUN mkdir -p /home/$USERNAME/dev/robosub-ros/catkin_ws/src; \
+    chown --recursive $USERNAME /home/$USERNAME/dev; \
+    chgrp --recursive $USERNAME /home/$USERNAME/dev
 
 # Copy and set entrypoint script
 COPY entrypoint.sh entrypoint.sh
