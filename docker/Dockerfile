@@ -29,6 +29,9 @@ RUN apt-get update && apt-get install -y \
 	sudo \
 	python-catkin-tools
 
+# Get required python packages
+RUN pip install pyserial
+
 # Set up locales
 RUN apt-get install -y locales
 RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
@@ -137,8 +140,6 @@ RUN apt-get update; \
     chmod +x install_geographiclib_datasets.sh; \
     ./install_geographiclib_datasets.sh	
 
-# Underwater sensor messages (DVL and Pressure)
-RUN apt-get install -y ros-kinetic-underwater-sensor-msgs
 
 
 
