@@ -27,7 +27,7 @@ ssh -XY -p 2200 duke@localhost
   * Start the container in the background
 
 * -p 2200:2200
-  * Forward port 22 on the container to port 2200 on user's computer
+  * Forward port 2200 on the container to port 2200 on user's computer
 
 * --mount type=bind,source=/PATH/TO/SRC,target=/home/duke/dev/robosub-ros/src
   * Create a binding between a folder on the user's computer to a folder inside the container
