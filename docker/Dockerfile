@@ -135,7 +135,7 @@ RUN git clone https://github.com/patrickelectric/ardupilot_gazebo; \
 RUN git clone https://github.com/patrickelectric/bluerov_ros_playground
 
 
-### ROS Plugins ###
+### ROS Plugins and Dependencies###
 
 # mavros
 RUN apt-get update; \
@@ -144,6 +144,13 @@ RUN apt-get update; \
     chmod +x install_geographiclib_datasets.sh; \
     ./install_geographiclib_datasets.sh	
 
+# avt_vimba_camera
+RUN apt-get install ros-kinetic-avt-vimba-camera
+
+COPY Vimba_v2.1.3_Linux.tgz Vimba_v2.1.3_Linux.tgz
+RUN tar -xf Vimba_v2.1.3_Linux.tgz; \
+    cd Vimba_2_1/VimbaGigETL; \
+    ./Install.sh
 
 
 
