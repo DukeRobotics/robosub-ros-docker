@@ -27,7 +27,8 @@ RUN apt-get update && apt-get install -y \
 	vim \
 	curl \
 	sudo \
-	python-catkin-tools
+	python-catkin-tools \
+	python-pip
 
 # Get required python packages
 RUN pip install pyserial
@@ -99,12 +100,15 @@ RUN hg clone https://bitbucket.org/osrf/gzweb; \
 RUN git clone https://github.com/ArduPilot/ardupilot.git; \
     cd ardupilot; \
     git submodule update --init --recursive; \
-    sed -i "s/sudo usermod -a -G dialout \$USER/sudo usermod -a -G dialout $USERNAME/" Tools/scripts/install-prereqs-ubuntu.sh; \
-    sed -i "s/pip2 -q install --user -U \$PYTHON_PKGS/pip2 -q install -U \$PYTHON_PKGS/" Tools/scripts/install-prereqs-ubuntu.sh; \
-    Tools/scripts/install-prereqs-ubuntu.sh -y; \
+    sed -i "s/sudo usermod -a -G dialout \$USER/sudo usermod -a -G dialout $USERNAME/" Tools/environment_install/install-prereqs-ubuntu.sh; \
+    sed -i "s/pip2 -q install --user -U \$PYTHON_PKGS/pip2 -q install -U \$PYTHON_PKGS/" Tools/environment_install/install-prereqs-ubuntu.sh; \
+    chmod +x Tools/environment_install/install-prereqs-ubuntu.sh; \
+    Tools/environment_install/install-prereqs-ubuntu.sh -y; \
     . ~/.profile; \
     ./waf configure --board sitl; \
     ./waf sub
+
+RUN echo "export PATH=$PATH:$WORKDIR/ardupilot/Tools/autotest" >> /home/$USERNAME/.bashrc
 
 # Get freebuoyancy plugin for gazebo
 RUN git clone https://github.com/bluerobotics/freebuoyancy_gazebo; \
