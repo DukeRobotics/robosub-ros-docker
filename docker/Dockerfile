@@ -108,7 +108,7 @@ RUN git clone https://github.com/ArduPilot/ardupilot.git; \
     ./waf configure --board sitl; \
     ./waf sub
 
-RUN echo "export PATH=$PATH:$WORKDIR/ardupilot/Tools/autotest" >> /home/$USERNAME/.bashrc
+RUN echo "export PATH=\$PATH:$WORKDIR/ardupilot/Tools/autotest" >> /home/$USERNAME/.bashrc
 
 # Get freebuoyancy plugin for gazebo
 RUN git clone https://github.com/bluerobotics/freebuoyancy_gazebo; \
@@ -150,7 +150,9 @@ RUN apt-get install ros-kinetic-avt-vimba-camera
 COPY Vimba_v2.1.3_Linux.tgz Vimba_v2.1.3_Linux.tgz
 RUN tar -xf Vimba_v2.1.3_Linux.tgz; \
     cd Vimba_2_1/VimbaGigETL; \
-    ./Install.sh
+    ./Install.sh; \
+    cd ..; \
+    echo "export PATH=\$PATH:$WORKDIR/Vimba_2_1/Tools/Viewer/Bin/x86_64bit" >> /home/$USERNAME/.bashrc
 
 
 
