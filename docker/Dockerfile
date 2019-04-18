@@ -154,6 +154,9 @@ RUN tar -xf Vimba_v2.1.3_Linux.tgz; \
     cd ..; \
     echo "export PATH=\$PATH:$WORKDIR/Vimba_2_1/Tools/Viewer/Bin/x86_64bit" >> /home/$USERNAME/.bashrc
 
+# robot_localization
+RUN apt-get install ros-kinetic-robot-localization
+
 
 
 ### Final Setup ###
