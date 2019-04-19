@@ -11,7 +11,7 @@ docker pull miron003/robosub-ros
 
 2. Run a container
 ```bash
-docker run -td -p 2200:2200 --mount type=bind,source=/PATH/TO/SRC,target=/home/duke/dev/robosub-ros/src  miron003/robosub-ros
+docker run -td -p 2200:2200 --mount type=bind,source=/PATH/TO/SRC,target=/home/duke/dev/robosub-ros/catkin_ws/src  miron003/robosub-ros
 ```
 
 3. Connect to the container
