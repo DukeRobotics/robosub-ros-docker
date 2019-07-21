@@ -60,7 +60,7 @@ docker run -td -p 2200:2200 --mount type=bind,source=C:\Users\Eric\Documents\Rob
 
 - Building should be done by the maintainer of the Dockerfile, and published so that others can follow the 'Running' instructions to use the image
 
-1. cd into the directory containing the Dockerfile
+1. ```cd``` into the directory containing the Dockerfile
 
 2. Build
 ```bash
