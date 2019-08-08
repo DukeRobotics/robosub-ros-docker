@@ -17,7 +17,6 @@ RUN echo $USERNAME":"$PASSWORD | chpasswd
 RUN usermod -aG sudo,dialout $USERNAME
 
 
-
 ### Basic Setup ###
 
 # Update and install tools
@@ -41,7 +40,6 @@ RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
 WORKDIR $WORKDIR
 
 
-
 ### SSH Settings ###
 
 # Set ssh to not use local X11 so graphics are forwarded to user
@@ -53,7 +51,6 @@ RUN sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
 
 # Clear apt caches to reduce image size
 RUN rm -rf /var/lib/apt/lists/*
-
 
 
 ### Gazebo setup ###
@@ -91,7 +88,6 @@ RUN hg clone https://bitbucket.org/osrf/gzweb; \
     hg up gzweb_1.4.0; \
     /bin/bash -c "source /usr/share/gazebo/setup.sh"; \
     npm run deploy --- -m
-
 
 
 ### SITL Installation ###
@@ -157,6 +153,8 @@ RUN tar -xf Vimba_v2.1.3_Linux.tgz; \
 # robot_localization
 RUN apt-get install ros-kinetic-robot-localization
 
+# pid
+RUN apt-get install ros-kinetic-pid
 
 
 ### Final Setup ###
