@@ -6,18 +6,34 @@ Basic docker setup for ros and ssh
 
 1. Get the image
 ```bash
-docker pull miron003/robosub-ros
+docker pull dukerobotics/robosub-ros
 ```
 
-2. Run a container
-```bash
-docker run -td -p 2200:2200 -p 8080:8080 --mount type=bind,source=/PATH/TO/SRC,target=/home/duke/dev/robosub-ros/catkin_ws/src  miron003/robosub-ros
-```
+2. Run a container. Note that `source` must be given the full path to the `robosub-ros/src` folder on your system in order to work. Here are some examples for how the command can be run on different systems, replace the path to `robosub-ros/src` with whatever it is on your computer.
+    * Windows
+    ```bash
+    docker run -td -p 2200:2200 --mount type=bind,source=C:\Users\Eric\Documents\Robotics\CS,target=/home/duke/dev/robosub-ros/src  dukerobotics/robosub-ros
+    ```
 
-3. Connect to the container
-```bash
-ssh -XY -p 2200 duke@localhost
-```
+    * Mac
+    ```bash
+    docker run -td -p 2200:2200 --mount type=bind,source=/Users/neil/Desktop/Code/robosub-ros/src,target=/home/duke/dev/robosub-ros/catkin_ws/src  dukerobotics/robosub-ros
+    ```
+
+    * Linux (production)
+    ```bash
+    docker run -td --privileged --net=host --mount type=bind,source=/home/robot/robosub-ros/src,target=/home/duke/dev/robosub-ros/catkin_ws/src  dukerobotics/robosub-ros
+    ```
+
+3. Connect to the container. 
+    * Local container
+    ```bash
+    ssh -XY -p 2200 duke@localhost
+    ```
+    * Remote (on robot) container 
+    ```bash
+    ssh -XY -p 2200 duke@192.168.1.1
+    ```
 
 #### Run a container notes
 * -t
@@ -37,18 +53,11 @@ ssh -XY -p 2200 duke@localhost
   * Run the container in privileged mode, allowing access to /dev
   * Use this flag if you need to connect to USB devices
 
+* --net=host
+    * Allow the container to access network devices (such as cameras)
+    * Automatically binds all container ports to system ports so no need to manually bind 2200
 
-  
-#### Run a container examples
-* Windows
-```bash
-docker run -td -p 2200:2200 --mount type=bind,source=C:\Users\Eric\Documents\Robotics\CS,target=/home/duke/dev/robosub-ros/src  miron003/robosub-ros
-```
 
-* Mac
-```bash
-```
-  
 #### Connect to a container notes
 * -XY
   * Forward graphics over ssh connections
