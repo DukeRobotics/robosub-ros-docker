@@ -6,7 +6,6 @@ ARG PASSWORD=robotics
 ARG BUILD_DIR_NAME=docker-build
 ARG WORKDIR=/home/$USERNAME/$BUILD_DIR_NAME
 
-
 ### User Settings ###
 
 # Create default user
@@ -16,6 +15,8 @@ RUN echo $USERNAME":"$PASSWORD | chpasswd
 # Add user to sudo and the dialout group to allow /dev access
 RUN usermod -aG sudo,dialout $USERNAME
 
+# Set the workdir
+WORKDIR $WORKDIR
 
 ### Basic Setup ###
 
@@ -26,152 +27,52 @@ RUN apt-get update && apt-get install -y \
 	vim \
 	curl \
 	sudo \
+    usbutils \
+    apt-utils \
 	python-catkin-tools \
-	python-pip
+	python-pip \
+    locales \
+    ros-kinetic-mavros ros-kinetic-mavros-extras \
+    ros-kinetic-avt-vimba-camera \
+    ros-kinetic-robot-localization \
+    ros-kinetic-pid \
+    ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
+    && \
+    # Clear apt caches to reduce image size
+    rm -rf /var/lib/apt/lists/*
 
 # Get required python packages
 RUN pip install pyserial
 
 # Set up locales
-RUN apt-get install -y locales
 RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
-
-# Set the workdir
-WORKDIR $WORKDIR
-
 
 ### SSH Settings ###
 
-# Set ssh to not use local X11 so graphics are forwarded to user
-RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config
-
-# Set ssh to use port 2200
-RUN sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
-
-
-# Clear apt caches to reduce image size
-RUN rm -rf /var/lib/apt/lists/*
-
-
-### Gazebo setup ###
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    libsdformat4 \
-    gazebo7 \
-    gazebo7-plugin-base \
-    libignition-math2 \
-    libignition-math2-dev \
-    libsdformat4-dev \
-    libgazebo7 \
-    libgazebo7-dev
-
-RUN apt-get update && apt-get install -y \
-    libjansson-dev \
-    nodejs \
-    npm \
-    nodejs-legacy \
-    libboost-dev \
-    imagemagick \
-    libtinyxml-dev \
-    mercurial \
-    cmake \
-    build-essential
-
-# Upgrade node
-RUN curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
-RUN sudo apt-get install -y nodejs
-
-# Clone gzweb
-RUN hg clone https://bitbucket.org/osrf/gzweb; \
-    cd gzweb; \
-    hg up gzweb_1.4.0; \
-    /bin/bash -c "source /usr/share/gazebo/setup.sh"; \
-    npm run deploy --- -m
-
-
-### SITL Installation ###
-
-# Get and build the SITL
-RUN git clone https://github.com/ArduPilot/ardupilot.git; \
-    cd ardupilot; \
-    git submodule update --init --recursive; \
-    sed -i "s/sudo usermod -a -G dialout \$USER/sudo usermod -a -G dialout $USERNAME/" Tools/environment_install/install-prereqs-ubuntu.sh; \
-    sed -i "s/pip2 -q install --user -U \$PYTHON_PKGS/pip2 -q install -U \$PYTHON_PKGS/" Tools/environment_install/install-prereqs-ubuntu.sh; \
-    chmod +x Tools/environment_install/install-prereqs-ubuntu.sh; \
-    Tools/environment_install/install-prereqs-ubuntu.sh -y; \
-    . ~/.profile; \
-    ./waf configure --board sitl; \
-    ./waf sub
-
-RUN echo "export PATH=\$PATH:$WORKDIR/ardupilot/Tools/autotest" >> /home/$USERNAME/.bashrc
-
-# Get freebuoyancy plugin for gazebo
-RUN git clone https://github.com/bluerobotics/freebuoyancy_gazebo; \
-    cd freebuoyancy_gazebo; \
-    mkdir build; \
-    cd build; \
-    cmake ..; \
-    make; \
-    sudo make install; \
-    sudo cp -a /usr/lib/x86_64-linux-gnu/gazebo-7.0/plugins/ /usr/lib/x86_64-linux-gnu/gazebo-7/
-
-# Get ardupilot plugin for gazebo
-RUN git clone https://github.com/patrickelectric/ardupilot_gazebo; \
-    cd ardupilot_gazebo; \
-    git checkout add_link; \
-    mkdir build; \
-    cd build; \
-    cmake ..; \
-    make; \
-    sudo make install; \
-    sudo cp -a /usr/lib/x86_64-linux-gnu/gazebo-7.0/plugins/ /usr/lib/x86_64-linux-gnu/gazebo-7/
-
-# Get bluerov_ros_playground
-RUN git clone https://github.com/patrickelectric/bluerov_ros_playground
-
+    # Set ssh to not use local X11 so graphics are forwarded to user
+RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
+    # Set ssh to use port 2200
+    sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
 
 ### ROS Plugins and Dependencies###
 
-# mavros
-RUN apt-get update && \
-    apt-get install -y ros-kinetic-mavros ros-kinetic-mavros-extras; \
-    wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/install_geographiclib_datasets.sh; \
-    chmod +x install_geographiclib_datasets.sh; \
-    ./install_geographiclib_datasets.sh	
-
-# avt_vimba_camera
-RUN apt-get update && \
-    apt-get install -y ros-kinetic-avt-vimba-camera
-
-COPY Vimba_v2.1.3_Linux.tgz Vimba_v2.1.3_Linux.tgz
-RUN tar -xf Vimba_v2.1.3_Linux.tgz; \
-    cd Vimba_2_1/VimbaGigETL; \
-    ./Install.sh; \
-    cd ..; \
+# Install Vimba libraries for avt_vimba_camera
+COPY Vimba_v2.1.3_Linux.tgz Vimba.tgz
+RUN tar -xf Vimba.tgz && \
+    cd Vimba_2_1/VimbaGigETL && \
+    ./Install.sh && \
     echo "export PATH=\$PATH:$WORKDIR/Vimba_2_1/Tools/Viewer/Bin/x86_64bit" >> /home/$USERNAME/.bashrc
-
-# robot_localization
-RUN apt-get update && \
-    apt-get install -y ros-kinetic-robot-localization
-
-# pid
-RUN apt-get update && \
-    apt-get install -y ros-kinetic-pid
-
-# rosserial
-RUN apt-get update && \
-    apt-get install -y ros-kinetic-rosserial ros-kinetic-rosserial-arduino
+RUN rm Vimba.tgz
 
 ### Final Setup ###
 
 # Change owner and group to user on installed files
-RUN chown --recursive $USERNAME $WORKDIR; \
+RUN chown --recursive $USERNAME $WORKDIR && \
     chgrp --recursive $USERNAME $WORKDIR
 
 # Add catkin workspace
-RUN mkdir -p /home/$USERNAME/dev/robosub-ros/catkin_ws/src; \
-    chown --recursive $USERNAME /home/$USERNAME/dev; \
+RUN mkdir -p /home/$USERNAME/dev/robosub-ros/catkin_ws/src && \
+    chown --recursive $USERNAME /home/$USERNAME/dev && \
     chgrp --recursive $USERNAME /home/$USERNAME/dev
 
 # Copy and set entrypoint script
