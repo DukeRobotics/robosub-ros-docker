@@ -27,19 +27,19 @@ RUN apt-get update && apt-get install -y \
 	vim \
 	curl \
 	sudo \
-    usbutils \
-    apt-utils \
+    	usbutils \
+    	apt-utils \
 	python-catkin-tools \
 	python-pip \
-    locales \
-    ros-kinetic-mavros ros-kinetic-mavros-extras \
-    ros-kinetic-avt-vimba-camera \
-    ros-kinetic-robot-localization \
-    ros-kinetic-pid \
-    ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
-    && \
-    # Clear apt caches to reduce image size
-    rm -rf /var/lib/apt/lists/*
+    	locales \
+    	ros-kinetic-mavros ros-kinetic-mavros-extras \
+    	ros-kinetic-avt-vimba-camera \
+    	ros-kinetic-robot-localization \
+    	ros-kinetic-pid \
+    	ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
+    	&& \
+    	# Clear apt caches to reduce image size
+    	rm -rf /var/lib/apt/lists/*
 
 # Get required python packages
 RUN pip install pyserial
@@ -49,7 +49,7 @@ RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
 
 ### SSH Settings ###
 
-    # Set ssh to not use local X11 so graphics are forwarded to user
+# Set ssh to not use local X11 so graphics are forwarded to user
 RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
     # Set ssh to use port 2200
     sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
