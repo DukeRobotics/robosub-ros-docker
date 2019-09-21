@@ -73,7 +73,7 @@ docker pull dukerobotics/robosub-ros
 
 2. Build
 ```bash
-docker build -t [dockerhub username]/robosub-ros .
+docker build -t dukerobotics/robosub-ros .
 ```
 
 
