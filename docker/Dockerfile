@@ -134,14 +134,15 @@ RUN git clone https://github.com/patrickelectric/bluerov_ros_playground
 ### ROS Plugins and Dependencies###
 
 # mavros
-RUN apt-get update; \
+RUN apt-get update && \
     apt-get install -y ros-kinetic-mavros ros-kinetic-mavros-extras; \
     wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/install_geographiclib_datasets.sh; \
     chmod +x install_geographiclib_datasets.sh; \
     ./install_geographiclib_datasets.sh	
 
 # avt_vimba_camera
-RUN apt-get install ros-kinetic-avt-vimba-camera
+RUN apt-get update && \
+    apt-get install -y ros-kinetic-avt-vimba-camera
 
 COPY Vimba_v2.1.3_Linux.tgz Vimba_v2.1.3_Linux.tgz
 RUN tar -xf Vimba_v2.1.3_Linux.tgz; \
@@ -151,11 +152,16 @@ RUN tar -xf Vimba_v2.1.3_Linux.tgz; \
     echo "export PATH=\$PATH:$WORKDIR/Vimba_2_1/Tools/Viewer/Bin/x86_64bit" >> /home/$USERNAME/.bashrc
 
 # robot_localization
-RUN apt-get install ros-kinetic-robot-localization
+RUN apt-get update && \
+    apt-get install -y ros-kinetic-robot-localization
 
 # pid
-RUN apt-get install ros-kinetic-pid
+RUN apt-get update && \
+    apt-get install -y ros-kinetic-pid
 
+# rosserial
+RUN apt-get update && \
+    apt-get install -y ros-kinetic-rosserial ros-kinetic-rosserial-arduino
 
 ### Final Setup ###
 
