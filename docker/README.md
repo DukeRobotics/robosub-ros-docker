@@ -45,7 +45,7 @@ docker pull dukerobotics/robosub-ros
 * -p 2200:2200
   * Forward port 2200 on the container to port 2200 on user's computer
 
-* --mount type=bind,source=/PATH/TO/SRC,target=/home/duke/dev/robosub-ros/src
+* --mount type=bind,source=/PATH/TO/SRC,target=/home/duke/dev/robosub-ros/catkin_ws/src
   * Create a binding between a folder on the user's computer to a folder inside the container
     * All files in src on user's computer will be mirrored to src inside container, i.e. changes made on user's computer will occur inside the container, and vice versa
 
