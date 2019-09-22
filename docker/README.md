@@ -75,7 +75,7 @@ docker pull dukerobotics/robosub-ros
 
 2. Build
 ```bash
-docker buildx build --platform linux/amd64,linux/arm64 -t dukerobotics/robosub-ros:experimental --push .
+docker buildx build --platform linux/amd64,linux/arm64 -t dukerobotics/robosub-ros:latest --push .
 ```
 
 
