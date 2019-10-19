@@ -1,11 +1,11 @@
-FROM osrf/ros:kinetic-desktop-full-xenial
+FROM ros:kinetic-ros-core-xenial
 
 ### Arguments ###
 ARG USERNAME=duke
 ARG PASSWORD=robotics
 ARG BUILD_DIR_NAME=docker-build
 ARG WORKDIR=/home/$USERNAME/$BUILD_DIR_NAME
-
+ARG TARGETPLATFORM
 ### User Settings ###
 
 # Create default user
@@ -31,15 +31,15 @@ RUN apt-get update && apt-get install -y \
     	apt-utils \
 	python-catkin-tools \
 	python-pip \
-    	locales \
-    	ros-kinetic-mavros ros-kinetic-mavros-extras \
-    	ros-kinetic-avt-vimba-camera \
-    	ros-kinetic-robot-localization \
-    	ros-kinetic-pid \
-    	ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
-    	&& \
-    	# Clear apt caches to reduce image size
-    	rm -rf /var/lib/apt/lists/*
+    locales \
+    ros-kinetic-desktop-full \
+    ros-kinetic-mavros ros-kinetic-mavros-extras \
+    ros-kinetic-robot-localization \
+    ros-kinetic-pid \
+    ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
+    && \
+    # Clear apt caches to reduce image size
+    rm -rf /var/lib/apt/lists/*
 
 # Get required python packages
 RUN pip install pyserial
@@ -57,11 +57,10 @@ RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
 ### ROS Plugins and Dependencies###
 
 # Install Vimba libraries for avt_vimba_camera
-COPY Vimba_v2.1.3_Linux.tgz Vimba.tgz
+COPY $TARGETPLATFORM/Vimba.tgz Vimba.tgz
 RUN tar -xf Vimba.tgz && \
-    cd Vimba_2_1/VimbaGigETL && \
-    ./Install.sh && \
-    echo "export PATH=\$PATH:$WORKDIR/Vimba_2_1/Tools/Viewer/Bin/x86_64bit" >> /home/$USERNAME/.bashrc
+    cd Vimba_3_0/VimbaGigETL && \
+    ./Install.sh
 RUN rm Vimba.tgz
 
 ### Final Setup ###
