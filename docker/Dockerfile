@@ -37,6 +37,7 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-robot-localization \
     ros-kinetic-pid \
     ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
+    ros-kinetic-rosbridge-suite\
     && \
     # Clear apt caches to reduce image size
     rm -rf /var/lib/apt/lists/*
