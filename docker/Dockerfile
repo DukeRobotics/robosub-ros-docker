@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-desktop-full \
     ros-kinetic-mavros ros-kinetic-mavros-extras \
     ros-kinetic-robot-localization \
-    ros-kinetic-pid \
+    ros-kinetic-pid ros-kinetic-camera-info-manager-py \
     ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
     ros-kinetic-rosbridge-suite\
     && \
