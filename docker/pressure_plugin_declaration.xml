@@ -1,3 +1,0 @@
-	<class name="pressure_sensor" type="mavros::extra_plugins::PressureSensorPlugin" base_class_type="mavros::plugin::PluginBase">
-		<description>Send pressure sensor data to FCU</description>
-	</class>
