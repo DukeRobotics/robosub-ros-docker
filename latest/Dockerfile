@@ -21,9 +21,9 @@ WORKDIR $WORKDIR
 ### Basic Setup ###
 
 # Update and install tools
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 	openssh-server \
-	x11-apps \
+	x11-apps xauth \
 	vim \
 	curl \
 	sudo \
@@ -37,8 +37,8 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-robot-localization \
     ros-kinetic-pid ros-kinetic-camera-info-manager-py \
     ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
-    ros-kinetic-rosbridge-suite \
-    && \
+    ros-kinetic-rosbridge-suite && \
+    apt-get clean && \
     # Clear apt caches to reduce image size
     rm -rf /var/lib/apt/lists/*
 

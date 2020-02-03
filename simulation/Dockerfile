@@ -6,10 +6,10 @@ WORKDIR /home/duke/dev
 ### Basic Setup ###
 
 # Update and install tools
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-kinetic-geometry2 \
-    xsltproc \
-    && \
+    xsltproc && \
+    apt-get clean && \
     # Clear apt caches to reduce image size
     rm -rf /var/lib/apt/lists/*
 
