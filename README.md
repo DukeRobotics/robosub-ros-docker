@@ -11,22 +11,24 @@ Robot Operating System (ROS) is quite hefty and does not run easily on all machi
 ## Building
 Building a docker container is the process of taking a Dockerfile, running all the commands inside it, and creating an image. Because we need to build our Dockerfile for multiple platforms (x86 for most computers and ARM for the Jetson), we use the `buildx` command, which allows us to build for multiple platforms at the same time. For more information on buildx, go [here](https://docs.docker.com/buildx/working-with-buildx/).
 
+Before trying to use buildx, make sure you have experimental features enabled. Go to Docker Preferences -> Command Line and select 'Enable experimental features'
+
 To build an image:
 
-1. Make sure you have experimental features enabled. Go to Docker Preferences -> Command Line and select 'Enable experimental features'
-2. `cd` into the directory containing the Dockerfile
-3. Create a new builder to get access to multi-architecture features
+`cd` into the directory containing the Dockerfile.
+
+Create a new builder to get access to multi-architecture features
 ```bash
 docker buildx create --name multibuilder
 ```
 - This will create a new builder with the name 'multibuilder' and 'docker-container' as the driver, giving it more capabilities.
 
-4. Tell docker to use that builder
+Tell docker to use that builder
 ```bash
 docker buildx use multibuilder
 ```
 
-5. Build the Dockerfile
+Build the Dockerfile
 ```bash
 docker buildx build --platform linux/amd64,linux/arm64 -t dukerobotics/robosub-ros:latest .
 ```
