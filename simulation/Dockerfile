@@ -20,3 +20,6 @@ RUN wget coppeliarobotics.com/files/CoppeliaSim_Edu_V4_0_0_Ubuntu16_04.tar.xz &&
     mv CoppeliaSim_Edu_V4_0_0_Ubuntu16_04 coppelia
 COPY runSim.sh runSim.sh
 
+RUN cp coppelia/compiledRosPlugins/libsimExtROSInterface.so coppelia/libsimExtROSInterface.so && \
+    chmod +x runSim.sh
+
