@@ -7,7 +7,8 @@
 1. ```cd``` into the directory containing the Dockerfile
 
 2. Build
-```docker build -t dukerobotics/robosub-ros:simulation .
+```bash
+docker build -t dukerobotics/robosub-ros:simulation .
 ```
 
 
