@@ -6,6 +6,8 @@
 
 - Buildx is currently experimental, for details, see [here](https://docs.docker.com/buildx/working-with-buildx/)
 
+- Experimental features in Docker must be enabled, go to Docker Preferences -> Docker Engine and set experimental to 'true'
+
 1. ```cd``` into the directory containing the Dockerfile
 
 2. Build
