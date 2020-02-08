@@ -33,3 +33,5 @@ Build the Dockerfile
 docker buildx build --platform linux/amd64,linux/arm64 -t dukerobotics/robosub-ros:latest .
 ```
 - This command will build an image for amd64 and arm64, called 'dukerobotics/robosub-ros' with the tag 'latest'
+
+If you want to automatically push the image to Dockerhub, add the `--push` tag to the command.
