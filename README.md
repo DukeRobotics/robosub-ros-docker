@@ -13,7 +13,7 @@ Building a docker container is the process of taking a Dockerfile, running all t
 
 Before trying to use buildx, make sure you have experimental features enabled. Go to Docker Preferences -> Command Line and select 'Enable experimental features'
 
-To build an image:
+### Building an image
 
 `cd` into the directory containing the Dockerfile.
 
