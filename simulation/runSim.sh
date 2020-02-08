@@ -19,4 +19,4 @@ else
 fi
 echo "Starting CoppeliaSim"
 
-./coppeliaSim.sh -h -s comm_server_test.ttt
+./coppeliaSim.sh -h -s comm_server_scene.ttt
