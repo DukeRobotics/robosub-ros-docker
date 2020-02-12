@@ -27,21 +27,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	vim \
 	curl \
 	sudo \
-    usbutils \
-    apt-utils \
+    	usbutils \
+    	apt-utils \
 	python-catkin-tools \
 	python-pip \
-    locales \
-    libceres-dev \
-    ros-kinetic-desktop-full \
-    ros-kinetic-mavros ros-kinetic-mavros-extras \
-    ros-kinetic-robot-localization  ros-kinetic-libg2o \
-    ros-kinetic-pid ros-kinetic-camera-info-manager-py \
-    ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
-    ros-kinetic-rosbridge-suite && \
-    apt-get clean && \
-    # Clear apt caches to reduce image size
-    rm -rf /var/lib/apt/lists/*
+    	locales \
+    	libceres-dev \
+    	ros-kinetic-desktop-full \
+    	ros-kinetic-mavros ros-kinetic-mavros-extras \
+    	ros-kinetic-robot-localization  ros-kinetic-libg2o \
+    	ros-kinetic-pid ros-kinetic-camera-info-manager-py \
+    	ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
+    	ros-kinetic-rosbridge-suite && \
+    	apt-get clean && \
+    	# Clear apt caches to reduce image size
+    	rm -rf /var/lib/apt/lists/*
 
 # Get required python packages
 RUN pip install pyserial dependency-injector
@@ -72,7 +72,7 @@ RUN chown --recursive $USERNAME $WORKDIR && \
     chgrp --recursive $USERNAME $WORKDIR
 
 # Add catkin workspace
-RUN mkdir -p /home/$USERNAME/dev/robosub-ros/catkin_ws/src && \
+RUN mkdir -p /home/$USERNAME/dev/robosub-ros && \
     chown --recursive $USERNAME /home/$USERNAME/dev && \
     chgrp --recursive $USERNAME /home/$USERNAME/dev
 
