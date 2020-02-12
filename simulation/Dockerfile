@@ -17,9 +17,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN wget coppeliarobotics.com/files/CoppeliaSim_Edu_V4_0_0_Ubuntu16_04.tar.xz && \
     tar -kxvf CoppeliaSim_Edu_V4_0_0_Ubuntu16_04.tar.xz && \
     rm CoppeliaSim_Edu_V4_0_0_Ubuntu16_04.tar.xz && \
-    mv CoppeliaSim_Edu_V4_0_0_Ubuntu16_04 coppelia
-COPY runSim.sh runSim.sh
-
-RUN cp coppelia/compiledRosPlugins/libsimExtROSInterface.so coppelia/libsimExtROSInterface.so && \
-    chmod +x runSim.sh
-
+    mv CoppeliaSim_Edu_V4_0_0_Ubuntu16_04 coppelia && \
+    cp coppelia/compiledRosPlugins/libsimExtROSInterface.so coppelia/libsimExtROSInterface.so
