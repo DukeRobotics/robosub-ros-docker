@@ -1,0 +1,3 @@
+#!/bin/bash
+docker manifest create dukerobotics/robosub-ros:latest dukerobotics/robosub-ros:arm64 dukerobotics/robosub-ros:amd64
+docker manifest push -p dukerobotics/robosub-ros:latest
