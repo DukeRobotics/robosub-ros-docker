@@ -1,4 +1,6 @@
 # robosub-ros-docker
+![Docker Hub Builds](https://img.shields.io/docker/cloud/build/dukerobotics/robosub-ros)
+![Docker Pulls](https://img.shields.io/docker/pulls/dukerobotics/robosub-ros)
 Docker image for ROS system to control a robot for the RoboSub Competition
 
 ## Summary
