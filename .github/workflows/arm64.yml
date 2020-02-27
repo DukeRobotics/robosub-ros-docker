@@ -10,12 +10,10 @@ on:
   pull_request:
 
 env:
-  # TODO: Change variable to your image's name.
   IMAGE_NAME: dukerobotics/robosub-ros:arm64
+  DOCKER_CLI_EXPERIMENTAL: enabled
 
 jobs:
-  # Push image to GitHub Package Registry.
-  # See also https://docs.docker.com/docker-hub/builds/
   push:
     runs-on: ubuntu-latest
     steps:
@@ -24,6 +22,7 @@ jobs:
         run: |
           docker run --rm --privileged multiarch/qemu-user-static:register --reset
           export DOCKER_CLI_EXPERIMENTAL=enabled
+          sudo systemctl restart docker
           docker info
           docker buildx ls
       
