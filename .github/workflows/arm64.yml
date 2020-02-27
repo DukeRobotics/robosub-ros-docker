@@ -25,6 +25,8 @@ jobs:
       - name: Setup environment
         run: |
           docker run --rm --privileged multiarch/qemu-user-static:register --reset
+          docker info
+          docker buildx ls
       
       - name: Build image
         run: docker buildx build --platform linux/arm64 -t dukerobotics/robosub-ros:arm64 --load .
