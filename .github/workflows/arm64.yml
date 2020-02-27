@@ -18,13 +18,12 @@ jobs:
   # See also https://docs.docker.com/docker-hub/builds/
   push:
     runs-on: ubuntu-latest
-    env:
-      DOCKER_CLI_EXPERIMENTAL: enabled
     steps:
       - uses: actions/checkout@v2
       - name: Setup environment
         run: |
           docker run --rm --privileged multiarch/qemu-user-static:register --reset
+          export DOCKER_CLI_EXPERIMENTAL=enabled
           docker info
           docker buildx ls
       
