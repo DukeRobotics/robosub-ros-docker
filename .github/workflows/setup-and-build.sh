@@ -12,6 +12,7 @@ docker buildx inspect --bootstrap
 docker buildx ls
 
 # Build image
+cd latest
 docker buildx build --platform ${TARGETPLATFORM} -t ${IMAGE_NAME} --load .
 
 # Test image
