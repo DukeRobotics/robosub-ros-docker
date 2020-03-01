@@ -8,6 +8,8 @@ This Dockerfile is used to generate three differently tagged images.
 3. `latest`: A Docker manifest list. Pulling `latest` will automatically choose between an ARM and x86 image depending on your system. This is the one you should use in most cases.
 
 ## Building
+- All of these images are also built and published automatically. They take a long time to build so be sure you need it.
+
 - Building should be done by the maintainer of the Dockerfile, and published so that others can follow the 'Running' instructions to use the image.
 
 - Buildx is currently experimental, for details, see [here](https://docs.docker.com/buildx/working-with-buildx/)
@@ -28,8 +30,7 @@ docker manifest push -p dukerobotics/robosub-ros:latest
 In the event that you get an error about an existing manifest list, check `~/.docker/manifests` to see if there are any existing manifests
 that match. If so, delete them and run the commands again.
 ### `arm64`
-
-ARM builds are currently not supported for autobuilds. Rebuilding the ARM image should be the most common case for manually building this Dockerfile. Run the below command to build and push a new ARM image with the `arm64` tag.
+Run the below command to build and push a new ARM image with the `arm64` tag.
 
 ```bash
 docker buildx build --platform linux/arm64 -t dukerobotics/robosub-ros:arm64 --push .
@@ -38,8 +39,7 @@ docker buildx build --platform linux/arm64 -t dukerobotics/robosub-ros:arm64 --p
 Now to update the manifest list for `latest` run the command in the section on updating the manifest list.
 
 ### `amd64`
-
-The `amd64` tag is set to autobuild on Docker Hub. Updates to master will therefore be reflected in the image around an hour after they are pushed. If there is ever a need to manually build and push the `amd64` tag, use the following commands:
+If there is ever a need to manually build and push the `amd64` tag, use the following commands:
 
 ```bash
 docker build --build-arg TARGETPLATFORM=linux/amd64 -t dukerobotics/robosub-ros:amd64 .
@@ -50,8 +50,6 @@ docker push dukerobotics/robosub-ros:amd64
 We now have the new image pushed to Docker Hub. Please note that any subsequent commit to master will erase this image.
 
 Now to update the manifest list for `latest` run the command in the section on updating the manifest list.
-
-
 
 ### `latest`
 The following command will build a new arm64 and amd64 image but **does not** update the `arm64` and `amd64` tags. Instead, it will push the new images directly to `latest`.
