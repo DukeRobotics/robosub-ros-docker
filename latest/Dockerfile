@@ -38,7 +38,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-kinetic-robot-localization  ros-kinetic-libg2o \
     ros-kinetic-pid ros-kinetic-camera-info-manager-py \
     ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
-    ros-kinetic-rosbridge-suite && \
+    ros-kinetic-joy ros-kinetic-rosbridge-suite && \
     apt-get clean && \
     # Clear apt caches to reduce image size
     rm -rf /var/lib/apt/lists/*
