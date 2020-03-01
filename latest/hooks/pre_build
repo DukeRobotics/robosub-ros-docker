@@ -1,3 +1,0 @@
-#!/bin/bash
-apt-get -y update
-apt-get -y --only-upgrade install docker-ee
