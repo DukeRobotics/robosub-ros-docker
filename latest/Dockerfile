@@ -34,7 +34,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     locales \
     libceres-dev \
     ros-kinetic-desktop-full \
-    ros-kinetic-mavros ros-kinetic-mavros-extras \
     ros-kinetic-robot-localization  ros-kinetic-libg2o \
     ros-kinetic-pid ros-kinetic-camera-info-manager-py \
     ros-kinetic-rosserial ros-kinetic-rosserial-arduino \
