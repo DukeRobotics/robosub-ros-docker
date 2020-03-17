@@ -15,6 +15,8 @@ jobs:
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:arm64
       TARGETPLATFORM: linux/arm64
+      FILE_NAME: arm64.tar
+      ARTIFACT_NAME: arm64
     steps:
       - uses: actions/checkout@v2
       - name: Setup environment and build
@@ -26,12 +28,21 @@ jobs:
         run: |
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
           docker push ${IMAGE_NAME}
+      - name: Save image as artifact
+        run: |
+          docker save ${IMAGE_NAME} > ${FILE_NAME}
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${ARTIFACT_NAME}
+          path: ./
 
   amd64:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:amd64
       TARGETPLATFORM: linux/amd64
+      FILE_NAME: amd64.tar
+      ARTIFACT_NAME: amd64
     steps:
       - uses: actions/checkout@v2
       - name: Setup environment and build
@@ -43,6 +54,13 @@ jobs:
         run: |
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
           docker push ${IMAGE_NAME}
+      - name: Save image as artifact
+        run: |
+          docker save ${IMAGE_NAME} > ${FILE_NAME}
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${ARTIFACT_NAME}
+          path: ./
   push:
     runs-on: ubuntu-latest
     needs: [arm64, amd64]
@@ -55,13 +73,48 @@ jobs:
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
           docker buildx imagetools create --tag dukerobotics/robosub-ros:latest dukerobotics/robosub-ros:amd64 dukerobotics/robosub-ros:arm64
 
+  latest:
+    runs-on: ubuntu-latest
+    needs: [arm64, amd64]
+    env:
+      IMAGE_NAME: dukerobotics/robosub-ros:latest
+      FILE_NAME: latest.tar
+      ARTIFACT_NAME: latest
+    steps:
+      - name: Download arm64 image
+        uses: actions/download-artifact@v1
+        with: 
+          name: arm64
+        run: |
+          docker load < arm64.tar
+      - name: Download amd64 image
+        uses: actions/download-artifact@v1
+        with: 
+          name: amd64
+        run: |
+          docker load < amd64.tar
+      - name: Save latest as artifact
+        run: |
+          docker manifest create ${IMAGE_NAME} dukerobotics/robosub-ros:arm64 dukerobotics/robosub-ros:amd64
+          docker save ${IMAGE_NAME} > ${FILE_NAME}
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${ARTIFACT_NAME}
+          path: ./
+
   simulation:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:simulation
-    needs: push
+    needs: latest
     steps:
       - uses: actions/checkout@v2
+      - name: Download latest image
+        uses: actions/download-artifact@v1
+        with: 
+          name: latest
+        run: |
+          docker load < latest.tar
       - name: Setup environment and build
         working-directory: 
         run: |
