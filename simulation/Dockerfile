@@ -7,6 +7,7 @@ WORKDIR /home/duke/dev
 
 # Update and install tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget \
     ros-kinetic-geometry2 \
     xsltproc && \
     apt-get clean && \
