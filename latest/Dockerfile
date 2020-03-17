@@ -23,9 +23,11 @@ WORKDIR $WORKDIR
 # Update and install tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     openssh-server \
+    mosh \
     x11-apps xauth \
     vim \
     curl \
+    wget \
     sudo \
     usbutils \
     apt-utils \
