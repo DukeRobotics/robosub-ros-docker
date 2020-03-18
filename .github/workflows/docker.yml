@@ -101,6 +101,7 @@ jobs:
           rm -rf amd64
       - name: Save image
         run: |
+          export DOCKER_CLI_EXPERIMENTAL=enabled
           docker manifest create ${IMAGE_NAME} dukerobotics/robosub-ros:arm64 dukerobotics/robosub-ros:amd64
           docker save ${IMAGE_NAME} | gzip > ${FILE_NAME}
       - name: Create artifact from image
@@ -123,6 +124,7 @@ jobs:
       - name: Load latest image
         run: |
           docker load < ./latest/latest.tar.gz
+          rm -rf latest
       - name: Setup environment and build
         working-directory: 
         run: |
