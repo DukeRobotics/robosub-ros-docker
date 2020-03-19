@@ -21,7 +21,7 @@ WORKDIR $WORKDIR
 ### Basic Setup ###
 
 # Update and install tools
-RUN apt-get install -y --no-install-recommends software-properties-common && \
+RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common && \
     add-apt-repository ppa:jgmath2000/et && \
     apt-get update && apt-get install -y --no-install-recommends \
     openssh-server mosh et \
