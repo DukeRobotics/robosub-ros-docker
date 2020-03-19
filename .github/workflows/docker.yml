@@ -63,6 +63,7 @@ jobs:
         with:
           name: amd64
           path: amd64.tar.gz
+
   push:
     runs-on: ubuntu-latest
     needs: [arm64, amd64]
@@ -75,22 +76,13 @@ jobs:
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
           docker buildx imagetools create --tag dukerobotics/robosub-ros:latest dukerobotics/robosub-ros:amd64 dukerobotics/robosub-ros:arm64
 
-  latest:
+  simulation:
     runs-on: ubuntu-latest
-    needs: [arm64, amd64]
     env:
-      IMAGE_NAME: dukerobotics/robosub-ros:latest
-      FILE_NAME: latest.tar.gz
-      ARTIFACT_NAME: latest
+      IMAGE_NAME: dukerobotics/robosub-ros:simulation
+    needs: amd64
     steps:
-      - name: Get arm64 image
-        uses: actions/download-artifact@v1
-        with: 
-          name: arm64
-      - name: Load arm64 image
-        run: |
-          docker load < ./arm64/arm64.tar.gz
-          rm -rf arm64
+      - uses: actions/checkout@v2
       - name: Get amd64 image
         uses: actions/download-artifact@v1
         with: 
@@ -99,32 +91,6 @@ jobs:
         run: |
           docker load < ./amd64/amd64.tar.gz
           rm -rf amd64
-      - name: Save image
-        run: |
-          export DOCKER_CLI_EXPERIMENTAL=enabled
-          docker manifest create ${IMAGE_NAME} dukerobotics/robosub-ros:arm64 dukerobotics/robosub-ros:amd64
-          docker save ${IMAGE_NAME} | gzip > ${FILE_NAME}
-      - name: Create artifact from image
-        uses: actions/upload-artifact@v1
-        with:
-          name: latest
-          path: latest.tar.gz
-
-  simulation:
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: dukerobotics/robosub-ros:simulation
-    needs: latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Get latest image
-        uses: actions/download-artifact@v1
-        with: 
-          name: latest
-      - name: Load latest image
-        run: |
-          docker load < ./latest/latest.tar.gz
-          rm -rf latest
       - name: Setup environment and build
         working-directory: 
         run: |
