@@ -21,11 +21,14 @@ WORKDIR $WORKDIR
 ### Basic Setup ###
 
 # Update and install tools
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssh-server \
+RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common && \
+    add-apt-repository ppa:jgmath2000/et && \
+    apt-get update && apt-get install -y --no-install-recommends \
+    openssh-server mosh et \
     x11-apps xauth \
     vim \
     curl \
+    wget \
     sudo \
     usbutils \
     apt-utils \
