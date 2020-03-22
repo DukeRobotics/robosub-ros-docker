@@ -26,7 +26,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     apt-get update && apt-get install -y --no-install-recommends \
     openssh-server mosh et \
     x11-apps xauth \
-    gzip \
     vim \
     curl \
     wget \
