@@ -1,4 +1,4 @@
-FROM dukerobotics/robosub-ros:latest
+FROM dukerobotics/robosub-ros:amd64
 
 # Set the workdir
 WORKDIR /home/duke/dev
