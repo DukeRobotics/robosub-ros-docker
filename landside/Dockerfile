@@ -56,10 +56,13 @@ RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
 # Set ssh to use port 2002
 RUN sed -i "s/Port 22/Port 2002/" /etc/ssh/sshd_config
 
-
 # Change owner and group to user on installed files
 RUN chown --recursive $USERNAME $WORKDIR && \
     chgrp --recursive $USERNAME $WORKDIR
+
+
+# Add script to setup multiple machines for pool testing
+COPY pool_setup.bash /home/$USERNAME/pool_setup.bash
 
 # Add catkin workspace
 RUN mkdir -p /home/$USERNAME/dev/robosub-ros && \
