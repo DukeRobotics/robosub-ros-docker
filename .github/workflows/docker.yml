@@ -61,6 +61,7 @@ jobs:
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:landside
     steps:
+      - uses: actions/checkout@v2 
       - name: Setup environment and build
         working-directory: 
         run: |
