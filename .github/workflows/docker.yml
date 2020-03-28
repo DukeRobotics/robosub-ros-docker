@@ -32,8 +32,6 @@ jobs:
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:amd64
       TARGETPLATFORM: linux/amd64
-      FILE_NAME: amd64.tar.gz
-      ARTIFACT_NAME: amd64
     steps:
       - uses: actions/checkout@v2
       - name: Setup environment and build
@@ -45,14 +43,6 @@ jobs:
         run: |
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
           docker push ${IMAGE_NAME}
-      - name: Save image
-        run: |
-          docker save ${IMAGE_NAME} | gzip > ${FILE_NAME}
-      - name: Create artifact from image
-        uses: actions/upload-artifact@v1
-        with:
-          name: amd64
-          path: amd64.tar.gz
 
   push:
     runs-on: ubuntu-latest
@@ -66,32 +56,18 @@ jobs:
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
           docker buildx imagetools create --tag dukerobotics/robosub-ros:latest dukerobotics/robosub-ros:amd64 dukerobotics/robosub-ros:arm64
 
-  simulation:
+  landside:
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: dukerobotics/robosub-ros:simulation
-    needs: amd64
+      IMAGE_NAME: dukerobotics/robosub-ros:landside
     steps:
-      - uses: actions/checkout@v2
-      - name: Get amd64 image
-        uses: actions/download-artifact@v1
-        with: 
-          name: amd64
-      - name: Load amd64 image
-        run: |
-          docker load < ./amd64/amd64.tar.gz
-          rm -rf amd64
       - name: Setup environment and build
         working-directory: 
         run: |
-          cd simulation
+          cd landside
           docker build -t ${IMAGE_NAME} .
       - name: Push image
         if: github.event_name == 'push'
         run: |
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
           docker push ${IMAGE_NAME}
-      - name: Cleanup artifacts
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./.github/workflows/cleanup.sh
