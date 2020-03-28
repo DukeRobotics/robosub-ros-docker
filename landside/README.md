@@ -8,7 +8,7 @@
 
 2. Build
 ```bash
-docker build -t dukerobotics/robosub-ros:simulation .
+docker build -t dukerobotics/robosub-ros:landside .
 ```
 
 

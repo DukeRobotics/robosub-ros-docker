@@ -1,11 +1,10 @@
 FROM ros:kinetic-ros-core-xenial
 
 ### Arguments ###
-ARG USERNAME=duke
+ARG USERNAME=landside
 ARG PASSWORD=robotics
 ARG BUILD_DIR_NAME=docker-build
 ENV WORKDIR=/home/$USERNAME/$BUILD_DIR_NAME
-ARG TARGETPLATFORM
 ### User Settings ###
 
 # Create default user
@@ -25,6 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     add-apt-repository ppa:jgmath2000/et && \
     apt-get update && apt-get install -y --no-install-recommends \
     openssh-server mosh et \
+    x11-apps xauth \
     vim \
     curl \
     wget \
@@ -34,36 +34,28 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     python-catkin-tools \
     python-pip \
     locales \
-    libceres-dev \
-    ros-kinetic-cv-bridge ros-kinetic-tf \
-    ros-kinetic-robot-localization  ros-kinetic-libg2o \
-    ros-kinetic-pid ros-kinetic-camera-info-manager-py \
-    ros-kinetic-rosserial ros-kinetic-rosserial-arduino && \
+    ros-kinetic-geometry2 ros-kinetic-rviz \
+    ros-kinetic-joy ros-kinetic-rosbridge-suite \
+    xsltproc && \
     apt-get clean && \
     # Clear apt caches to reduce image size
     rm -rf /var/lib/apt/lists/*
 
-# Get required python packages
-RUN pip install pyserial dependency-injector
+# Install the simulator
+RUN wget coppeliarobotics.com/files/CoppeliaSim_Edu_V4_0_0_Ubuntu16_04.tar.xz && \
+    tar -xf CoppeliaSim_Edu_V4_0_0_Ubuntu16_04.tar.xz && \
+    rm CoppeliaSim_Edu_V4_0_0_Ubuntu16_04.tar.xz && \
+    mv CoppeliaSim_Edu_V4_0_0_Ubuntu16_04 coppelia && \
+    cp coppelia/compiledRosPlugins/libsimExtROSInterface.so coppelia/libsimExtROSInterface.so
 
 # Set up locales
 RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
 
 ### SSH Settings ###
 
-# Set ssh to use port 2200
-RUN sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
+# Set ssh to use port 2002
+RUN sed -i "s/Port 22/Port 2002/" /etc/ssh/sshd_config
 
-### ROS Plugins and Dependencies###
-
-# Install Vimba libraries for avt_vimba_camera
-COPY $TARGETPLATFORM/Vimba.tgz Vimba.tgz
-RUN tar -xf Vimba.tgz && \
-    cd Vimba_3_0/VimbaGigETL && \
-    ./Install.sh
-RUN rm Vimba.tgz
-
-### Final Setup ###
 
 # Change owner and group to user on installed files
 RUN chown --recursive $USERNAME $WORKDIR && \
