@@ -1,39 +1,17 @@
-FROM ros:kinetic-ros-core-xenial
+FROM dukerobotics/robosub-ros:core
 
 ### Arguments ###
-ARG USERNAME=duke
-ARG PASSWORD=robotics
-ARG BUILD_DIR_NAME=docker-build
-ENV WORKDIR=/home/$USERNAME/$BUILD_DIR_NAME
 ARG TARGETPLATFORM
-### User Settings ###
 
-# Create default user
-RUN adduser --disabled-password --gecos "" $USERNAME
-RUN echo $USERNAME":"$PASSWORD | chpasswd
+### SSH Setup ###
 
-# Add user to sudo and the dialout group to allow /dev access
-RUN usermod -aG sudo,dialout $USERNAME
-
-# Set the workdir
-WORKDIR $WORKDIR
+# Set ssh to use port 2200
+RUN sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
 
 ### Basic Setup ###
 
 # Update and install tools
-RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common && \
-    add-apt-repository ppa:jgmath2000/et && \
-    apt-get update && apt-get install -y --no-install-recommends \
-    openssh-server mosh et \
-    vim \
-    curl \
-    wget \
-    sudo \
-    usbutils \
-    apt-utils \
-    python-catkin-tools \
-    python-pip \
-    locales \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libceres-dev \
     ros-kinetic-cv-bridge ros-kinetic-tf \
     ros-kinetic-robot-localization  ros-kinetic-libg2o \
@@ -45,14 +23,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
 
 # Get required python packages
 RUN pip install pyserial dependency-injector
-
-# Set up locales
-RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
-
-### SSH Settings ###
-
-# Set ssh to use port 2200
-RUN sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
 
 ### ROS Plugins and Dependencies###
 
@@ -68,13 +38,3 @@ RUN rm Vimba.tgz
 # Change owner and group to user on installed files
 RUN chown --recursive $USERNAME $WORKDIR && \
     chgrp --recursive $USERNAME $WORKDIR
-
-# Add catkin workspace
-RUN mkdir -p /home/$USERNAME/dev/robosub-ros && \
-    chown --recursive $USERNAME /home/$USERNAME/dev && \
-    chgrp --recursive $USERNAME /home/$USERNAME/dev
-
-# Copy and set entrypoint script
-COPY entrypoint.sh entrypoint.sh
-RUN chmod +x entrypoint.sh
-ENTRYPOINT $WORKDIR/entrypoint.sh
