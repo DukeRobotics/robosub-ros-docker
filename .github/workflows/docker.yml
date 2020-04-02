@@ -40,7 +40,7 @@ jobs:
   core-amd64:
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: dukerobotics/robosub-ros:main-amd64
+      IMAGE_NAME: dukerobotics/robosub-ros:core-amd64
       TARGETPLATFORM: linux/amd64
       FOLDER_NAME: core
       BASE_IMAGE: ros:kinetic-ros-core-xenial
