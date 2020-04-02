@@ -1,4 +1,5 @@
-FROM dukerobotics/robosub-ros:core
+ARG BASE_IMAGE=dukerobotics/robosub-ros:core
+FROM ${BASE_IMAGE}
 
 ### SSH Settings ###
 
@@ -35,5 +36,4 @@ RUN chmod a+x /opt/ros/kinetic/setup_pool.bash
 RUN chown --recursive $USERNAME $WORKDIR && \
     chgrp --recursive $USERNAME $WORKDIR
 
-
-
+ENV COMPUTER_TYPE=landside

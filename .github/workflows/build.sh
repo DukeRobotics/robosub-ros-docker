@@ -3,8 +3,8 @@
 set -ex
 
 # Build image
-cd latest
-docker buildx build --platform ${TARGETPLATFORM} -t ${IMAGE_NAME} --load .
+cd ${FOLDER_NAME}
+docker buildx build --build-arg BASE_IMAGE=${BASE_IMAGE} --platform ${TARGETPLATFORM} -t ${IMAGE_NAME} --load .
 
 # Test image
 docker-compose --file clone-and-build.test.yml run sut

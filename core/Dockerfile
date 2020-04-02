@@ -1,4 +1,5 @@
-FROM ros:kinetic-ros-core-xenial
+ARG BASE_IMAGE=ros:kinetic-ros-core-xenial
+FROM ${BASE_IMAGE}
 
 ### Arguments ###
 ENV USERNAME=duke

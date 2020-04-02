@@ -1,6 +1,6 @@
-FROM dukerobotics/robosub-ros:core
+ARG BASE_IMAGE=dukerobotics/robosub-ros:core
+FROM ${BASE_IMAGE}
 
-### Arguments ###
 ARG TARGETPLATFORM
 
 ### SSH Setup ###
@@ -38,3 +38,5 @@ RUN rm Vimba.tgz
 # Change owner and group to user on installed files
 RUN chown --recursive $USERNAME $WORKDIR && \
     chgrp --recursive $USERNAME $WORKDIR
+
+ENV COMPUTER_TYPE=robot
