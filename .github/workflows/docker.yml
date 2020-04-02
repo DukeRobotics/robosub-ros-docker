@@ -86,6 +86,7 @@ jobs:
         run: |
           ./.github/workflows/setup.sh
           ./.github/workflows/build.sh
+          ./.github/workflows/test.sh
       - name: Push image
         if: github.event_name == 'push'
         run: |
@@ -114,6 +115,7 @@ jobs:
         run: |
           ./.github/workflows/setup.sh
           ./.github/workflows/build.sh
+          ./.github/workflows/test.sh
       - name: Push image
         if: github.event_name == 'push'
         run: |
