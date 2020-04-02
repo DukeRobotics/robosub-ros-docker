@@ -162,7 +162,9 @@ jobs:
 
   cleanup:
     runs-on: ubuntu-latest
-    needs: [push,landside]
+    needs: [push, landside]
+    steps:
+      - uses: actions/checkout@v2
       - name: Cleanup artifacts
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
