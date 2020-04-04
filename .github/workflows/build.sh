@@ -3,7 +3,7 @@
 set -ex
 
 # Use experimental Docker
-sudo python3 ./.github/workflows/experimental.py
+sudo jq -n '{experimental: true}' > /etc/docker/daemon.json
 sudo systemctl restart docker
 
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
