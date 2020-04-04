@@ -3,7 +3,7 @@
 set -ex
 
 # Use experimental Docker
-sudo jq -n '{experimental: true}' > /etc/docker/daemon.json
+sudo jq -n '{experimental: true}' | sudo tee /etc/docker/daemon.json > /dev/null
 sudo systemctl restart docker
 
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
