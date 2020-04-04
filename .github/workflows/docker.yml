@@ -135,7 +135,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./.github/workflows/cleanup.sh
   
-landside:
+  landside:
     runs-on: ubuntu-latest
     needs: core-amd64
     env:
