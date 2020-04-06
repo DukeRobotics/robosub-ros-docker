@@ -2,23 +2,13 @@ ARG BASE_IMAGE=ros:kinetic-ros-core-xenial
 FROM ${BASE_IMAGE}
 
 ### Arguments ###
-ENV USERNAME=duke
-ARG PASSWORD=robotics
 ARG BUILD_DIR_NAME=docker-build
-ENV WORKDIR=/home/$USERNAME/$BUILD_DIR_NAME
-### User Settings ###
+ENV WORKDIR=/root/$BUILD_DIR_NAME
 
-# Create default user
-RUN adduser --disabled-password --gecos "" $USERNAME
-RUN echo $USERNAME":"$PASSWORD | chpasswd
-
-# Add user to sudo and the dialout group to allow /dev access
-RUN usermod -aG sudo,dialout $USERNAME
+### Basic Setup ###
 
 # Set the workdir
 WORKDIR $WORKDIR
-
-### Basic Setup ###
 
 # Update and install tools
 RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common && \
@@ -43,10 +33,8 @@ RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
 
 ### Final Setup ###
 
-# Add catkin workspace
-RUN mkdir -p /home/$USERNAME/dev/robosub-ros && \
-    chown --recursive $USERNAME /home/$USERNAME/dev && \
-    chgrp --recursive $USERNAME /home/$USERNAME/dev
+# Add catkin ws
+RUN mkdir -p /root/dev/robosub-ros
 
 # Copy and set entrypoint script
 COPY entrypoint.sh entrypoint.sh

@@ -29,11 +29,8 @@ RUN wget coppeliarobotics.com/files/CoppeliaSim_Edu_V4_0_0_Ubuntu16_04.tar.xz &&
 ### Final Setup ###
 
 # Add script to setup multiple machines for pool testing
-COPY pool_setup.bash /opt/ros/kinetic/setup_pool.bash
-RUN chmod a+x /opt/ros/kinetic/setup_pool.bash
+COPY setup_pool.bash /opt/ros/kinetic/setup_pool.bash
+RUN chmod +x /opt/ros/kinetic/setup_pool.bash
 
-# Change owner and group to user on installed files
-RUN chown --recursive $USERNAME $WORKDIR && \
-    chgrp --recursive $USERNAME $WORKDIR
-
+# Set computer type
 ENV COMPUTER_TYPE=landside

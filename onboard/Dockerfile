@@ -33,10 +33,5 @@ RUN tar -xf Vimba.tgz && \
     ./Install.sh
 RUN rm Vimba.tgz
 
-### Final Setup ###
-
-# Change owner and group to user on installed files
-RUN chown --recursive $USERNAME $WORKDIR && \
-    chgrp --recursive $USERNAME $WORKDIR
-
-ENV COMPUTER_TYPE=robot
+# Set computer type
+ENV COMPUTER_TYPE=onboard
