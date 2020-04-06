@@ -68,7 +68,7 @@ jobs:
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:onboard-arm64
       TARGETPLATFORM: linux/arm64
-      FOLDER_NAME: latest
+      FOLDER_NAME: onboard
       BASE_IMAGE: dukerobotics/robosub-ros:core-arm64
     steps:
       - uses: actions/checkout@v2
@@ -96,7 +96,7 @@ jobs:
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:onboard-amd64
       TARGETPLATFORM: linux/amd64
-      FOLDER_NAME: latest
+      FOLDER_NAME: onboard
       BASE_IMAGE: dukerobotics/robosub-ros:core-amd64
     steps:
       - uses: actions/checkout@v2
