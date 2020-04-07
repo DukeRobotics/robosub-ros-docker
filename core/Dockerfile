@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ubuntu:bionic
+ARG BASE_IMAGE=dukerobotics/robosub-ros:base
 FROM ${BASE_IMAGE}
 
 ### Arguments ###
