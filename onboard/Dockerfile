@@ -13,10 +13,10 @@ RUN sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
 # Update and install tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libceres-dev \
-    ros-kinetic-cv-bridge ros-kinetic-tf \
-    ros-kinetic-robot-localization  ros-kinetic-libg2o \
-    ros-kinetic-pid ros-kinetic-camera-info-manager-py \
-    ros-kinetic-rosserial ros-kinetic-rosserial-arduino && \
+    ros-melodic-cv-bridge ros-melodic-tf \
+    ros-melodic-robot-localization  ros-melodic-libg2o \
+    ros-melodic-pid ros-melodic-camera-info-manager-py \
+    ros-melodic-rosserial ros-melodic-rosserial-arduino && \
     apt-get clean && \
     # Clear apt caches to reduce image size
     rm -rf /var/lib/apt/lists/*

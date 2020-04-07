@@ -16,7 +16,7 @@ jobs:
       IMAGE_NAME: dukerobotics/robosub-ros:core-arm64
       TARGETPLATFORM: linux/arm64
       FOLDER_NAME: core
-      BASE_IMAGE: ros:kinetic-ros-core-xenial
+      BASE_IMAGE: ros:melodic-ros-core-bionic
     steps:
       - uses: actions/checkout@v2
       - name: Setup environment and build
@@ -42,7 +42,7 @@ jobs:
       IMAGE_NAME: dukerobotics/robosub-ros:core-amd64
       TARGETPLATFORM: linux/amd64
       FOLDER_NAME: core
-      BASE_IMAGE: ros:kinetic-ros-core-xenial
+      BASE_IMAGE: ros:melodic-ros-core-bionic
     steps:
       - uses: actions/checkout@v2
       - name: Setup environment and build

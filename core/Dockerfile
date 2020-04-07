@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ros:kinetic-ros-core-xenial
+ARG BASE_IMAGE=ros:melodic-ros-core-bionic
 FROM ${BASE_IMAGE}
 
 ### Arguments ###
