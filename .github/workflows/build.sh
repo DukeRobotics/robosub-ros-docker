@@ -2,9 +2,14 @@
 
 set -ex
 
-# Build image
-cd latest
-docker buildx build --platform ${TARGETPLATFORM} -t ${IMAGE_NAME} --load .
+# Use experimental Docker
+sudo jq -n '{experimental: true}' | sudo tee /etc/docker/daemon.json > /dev/null
+sudo systemctl restart docker
 
-# Test image
-docker-compose --file clone-and-build.test.yml run sut
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+
+# Build image
+cd ${FOLDER_NAME}
+docker build --build-arg BASE_IMAGE=${BASE_IMAGE} --build-arg TARGETPLATFORM=${TARGETPLATFORM} --platform ${TARGETPLATFORM} -t ${IMAGE_NAME} .
+
+
