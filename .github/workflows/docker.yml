@@ -217,11 +217,11 @@ jobs:
       - name: Get core image
         uses: actions/download-artifact@v1
         with: 
-          name: amd64
+          name: core-amd64
       - name: Load core image
         run: |
-          docker load < ./amd64/amd64.tar.gz
-          rm -rf amd64
+          docker load < ./core-amd64/core-amd64.tar.gz
+          rm -rf core-amd64
       - name: Setup environment and build
         working-directory: 
         run: |
