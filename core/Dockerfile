@@ -3,6 +3,7 @@ FROM ${BASE_IMAGE}
 
 ### Arguments ###
 ARG BUILD_DIR_NAME=docker-build
+ARG DEBIAN_FRONTEND=noninteractive
 ENV WORKDIR=/root/$BUILD_DIR_NAME
 
 # Set the workdir
