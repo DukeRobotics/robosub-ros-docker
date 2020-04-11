@@ -1,5 +1,4 @@
-ARG BASE_IMAGE=dukerobotics/robosub-ros:base
-FROM ${BASE_IMAGE}
+FROM dukerobotics/robosub-ros:base
 
 ### Arguments ###
 ARG BUILD_DIR_NAME=docker-build

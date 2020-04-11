@@ -10,76 +10,15 @@ on:
   pull_request:
 
 jobs:
-  base-arm64:
-    runs-on: ubuntu-latest
-    env:
-      BASE_IMAGE: nvcr.io/nvidia/l4t-base:r32.3.1
-      IMAGE_NAME: dukerobotics/robosub-ros:base-arm64
-    steps:
-      - uses: actions/checkout@v2
-      - name: Pull and tag l4t image
-        run: |
-          docker pull ${BASE_IMAGE}
-          docker tag ${BASE_IMAGE} ${IMAGE_NAME}
-      - name: Push image
-        if: github.event_name == 'push'
-        run: |
-          echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
-          docker push ${IMAGE_NAME}
-      - name: Save image
-        run: |
-          docker save ${IMAGE_NAME} | gzip > base-arm64.tar.gz
-      - name: Create artifact from image
-        uses: actions/upload-artifact@v1
-        with:
-          name: base-arm64
-          path: base-arm64.tar.gz
-
-
-  base-amd64:
-    runs-on: ubuntu-latest
-    env:
-      BASE_IMAGE: ubuntu:bionic
-      IMAGE_NAME: dukerobotics/robosub-ros:base-amd64
-    steps:
-      - uses: actions/checkout@v2
-      - name: Pull and tag bionic image
-        run: |
-          docker pull ${BASE_IMAGE}
-          docker tag ${BASE_IMAGE} ${IMAGE_NAME}
-      - name: Push image
-        if: github.event_name == 'push'
-        run: |
-          echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
-          docker push ${IMAGE_NAME}
-      - name: Save image
-        run: |
-          docker save ${IMAGE_NAME} | gzip > base-amd64.tar.gz
-      - name: Create artifact from image
-        uses: actions/upload-artifact@v1
-        with:
-          name: base-amd64
-          path: base-amd64.tar.gz
-
-
   core-arm64:
     runs-on: ubuntu-latest
-    needs: base-arm64
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:core-arm64
       TARGETPLATFORM: linux/arm64
       FOLDER_NAME: core
-      BASE_IMAGE: dukerobotics/robosub-ros:base-arm64
+      BASE_IMAGE: dukerobotics/robosub-ros:base
     steps:
       - uses: actions/checkout@v2
-      - name: Get base image
-        uses: actions/download-artifact@v1
-        with: 
-          name: base-arm64
-      - name: Load core image
-        run: |
-          docker load < ./base-arm64/base-arm64.tar.gz
-          rm -rf base-arm64
       - name: Setup environment and build
         run: |
           ./.github/workflows/build.sh
@@ -99,22 +38,13 @@ jobs:
 
   core-amd64:
     runs-on: ubuntu-latest
-    needs: base-amd64
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:core-amd64
       TARGETPLATFORM: linux/amd64
       FOLDER_NAME: core
-      BASE_IMAGE: dukerobotics/robosub-ros:base-amd64
+      BASE_IMAGE: dukerobotics/robosub-ros:base
     steps:
       - uses: actions/checkout@v2
-      - name: Get base image
-        uses: actions/download-artifact@v1
-        with: 
-          name: base-amd64
-      - name: Load core image
-        run: |
-          docker load < ./base-amd64/base-amd64.tar.gz
-          rm -rf base-amd64
       - name: Setup environment and build
         run: |
           ./.github/workflows/build.sh
@@ -198,7 +128,6 @@ jobs:
         run: |
           ./.github/workflows/setup.sh
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
-          docker buildx imagetools create --tag dukerobotics/robosub-ros:base dukerobotics/robosub-ros:base-amd64 dukerobotics/robosub-ros:base-arm64
           docker buildx imagetools create --tag dukerobotics/robosub-ros:core dukerobotics/robosub-ros:core-amd64 dukerobotics/robosub-ros:core-arm64
           docker buildx imagetools create --tag dukerobotics/robosub-ros:onboard dukerobotics/robosub-ros:onboard-amd64 dukerobotics/robosub-ros:onboard-arm64
       - name: Cleanup artifacts
