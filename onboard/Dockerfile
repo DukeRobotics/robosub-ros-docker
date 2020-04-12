@@ -6,7 +6,7 @@ ARG TARGETPLATFORM
 ### SSH Setup ###
 
 # Set ssh to use port 2200
-RUN sed -i "s/Port 22/Port 2200/" /etc/ssh/sshd_config
+RUN echo "Port 2200" >> /etc/ssh/sshd_config
 
 ### Basic Setup ###
 

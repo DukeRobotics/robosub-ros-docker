@@ -5,8 +5,8 @@ FROM ${BASE_IMAGE}
 
 # Set ssh to not use local X11 so graphics are forwarded to user
 RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
-    # Set ssh to use port 2202
-    sed -i "s/Port 22/Port 2202/" /etc/ssh/sshd_config
+    # Set ssh to use port 2201
+    echo "Port 2201" >> /etc/ssh/sshd_config
 
 ### Final Installs ###
 
@@ -14,7 +14,7 @@ RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-melodic-geometry2 ros-melodic-rviz \
     ros-melodic-joy ros-melodic-rosbridge-suite \
-    xsltproc && \
+    xsltproc xauth && \
     apt-get clean && \
     # Clear apt caches to reduce image size
     rm -rf /var/lib/apt/lists/*

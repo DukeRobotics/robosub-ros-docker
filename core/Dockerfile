@@ -66,6 +66,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
 # Set up locales
 RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
 
+# Set a password for root
+RUN echo root:robotics | chpasswd
+
+# Allow root to login over ssh
+RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+
 ### Final Setup ###
 
 # Add catkin ws
