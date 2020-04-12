@@ -16,7 +16,7 @@ jobs:
       IMAGE_NAME: dukerobotics/robosub-ros:core-arm64
       TARGETPLATFORM: linux/arm64
       FOLDER_NAME: core
-      BASE_IMAGE: ros:kinetic-ros-core-xenial
+      BASE_IMAGE: dukerobotics/robosub-ros:base
     steps:
       - uses: actions/checkout@v2
       - name: Setup environment and build
@@ -29,12 +29,12 @@ jobs:
           docker push ${IMAGE_NAME}
       - name: Save image
         run: |
-          docker save ${IMAGE_NAME} | gzip > arm64.tar.gz
+          docker save ${IMAGE_NAME} | gzip > core-arm64.tar.gz
       - name: Create artifact from image
         uses: actions/upload-artifact@v1
         with:
-          name: arm64
-          path: arm64.tar.gz
+          name: core-arm64
+          path: core-arm64.tar.gz
 
   core-amd64:
     runs-on: ubuntu-latest
@@ -42,7 +42,7 @@ jobs:
       IMAGE_NAME: dukerobotics/robosub-ros:core-amd64
       TARGETPLATFORM: linux/amd64
       FOLDER_NAME: core
-      BASE_IMAGE: ros:kinetic-ros-core-xenial
+      BASE_IMAGE: dukerobotics/robosub-ros:base
     steps:
       - uses: actions/checkout@v2
       - name: Setup environment and build
@@ -55,12 +55,12 @@ jobs:
           docker push ${IMAGE_NAME}
       - name: Save image
         run: |
-          docker save ${IMAGE_NAME} | gzip > amd64.tar.gz
+          docker save ${IMAGE_NAME} | gzip > core-amd64.tar.gz
       - name: Create artifact from image
         uses: actions/upload-artifact@v1
         with:
-          name: amd64
-          path: amd64.tar.gz
+          name: core-amd64
+          path: core-amd64.tar.gz
 
   onboard-arm64:
     runs-on: ubuntu-latest
@@ -75,11 +75,11 @@ jobs:
       - name: Get core image
         uses: actions/download-artifact@v1
         with: 
-          name: arm64
+          name: core-arm64
       - name: Load core image
         run: |
-          docker load < ./arm64/arm64.tar.gz
-          rm -rf arm64
+          docker load < ./core-arm64/core-arm64.tar.gz
+          rm -rf core-arm64
       - name: Setup environment and build
         run: |
           ./.github/workflows/build.sh
@@ -103,11 +103,11 @@ jobs:
       - name: Get core image
         uses: actions/download-artifact@v1
         with: 
-          name: amd64
+          name: core-amd64
       - name: Load core image
         run: |
-          docker load < ./amd64/amd64.tar.gz
-          rm -rf amd64
+          docker load < ./core-amd64/core-amd64.tar.gz
+          rm -rf core-amd64
       - name: Setup environment and build
         run: |
           ./.github/workflows/build.sh
@@ -146,11 +146,11 @@ jobs:
       - name: Get core image
         uses: actions/download-artifact@v1
         with: 
-          name: amd64
+          name: core-amd64
       - name: Load core image
         run: |
-          docker load < ./amd64/amd64.tar.gz
-          rm -rf amd64
+          docker load < ./core-amd64/core-amd64.tar.gz
+          rm -rf core-amd64
       - name: Setup environment and build
         working-directory: 
         run: |

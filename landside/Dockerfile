@@ -12,8 +12,8 @@ RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
 
 # Update and install tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ros-kinetic-geometry2 ros-kinetic-rviz \
-    ros-kinetic-joy ros-kinetic-rosbridge-suite \
+    ros-melodic-geometry2 ros-melodic-rviz \
+    ros-melodic-joy ros-melodic-rosbridge-suite \
     xsltproc && \
     apt-get clean && \
     # Clear apt caches to reduce image size
@@ -29,8 +29,8 @@ RUN wget coppeliarobotics.com/files/CoppeliaSim_Edu_V4_0_0_Ubuntu16_04.tar.xz &&
 ### Final Setup ###
 
 # Add script to setup multiple machines for pool testing
-COPY setup_pool.bash /opt/ros/kinetic/setup_pool.bash
-RUN chmod +x /opt/ros/kinetic/setup_pool.bash
+COPY setup_pool.bash /opt/ros/melodic/setup_pool.bash
+RUN chmod +x /opt/ros/melodic/setup_pool.bash
 
 # Set computer type
 ENV COMPUTER_TYPE=landside
