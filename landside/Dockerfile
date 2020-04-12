@@ -6,7 +6,7 @@ FROM ${BASE_IMAGE}
 # Set ssh to not use local X11 so graphics are forwarded to user
 RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
     # Set ssh to use port 2202
-    sed -i "s/Port 22/Port 2202/" /etc/ssh/sshd_config
+    echo "Port 2201" >> /etc/ssh/sshd_config
 
 ### Final Installs ###
 
