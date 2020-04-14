@@ -13,6 +13,9 @@ RUN echo "Port 2200" >> /etc/ssh/sshd_config
 # Update and install tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libceres-dev \
+    python-numpy python-scipy python-future  \
+    python-six python-dateutil python-skimage \
+    python-pywt python-pandas \
     ros-melodic-cv-bridge ros-melodic-tf \
     ros-melodic-robot-localization  ros-melodic-libg2o \
     ros-melodic-pid ros-melodic-camera-info-manager-py \
@@ -22,7 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 # Get required python packages
-RUN pip install pyserial dependency-injector
+RUN pip install pyserial dependency-injector pillow==6
 
 ### ROS Plugins and Dependencies###
 
