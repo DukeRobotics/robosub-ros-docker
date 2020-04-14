@@ -72,6 +72,9 @@ RUN echo root:robotics | chpasswd
 # Allow root to login over ssh
 RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
+# Generate ssh keys
+RUN ssh-keygen -A
+
 ### Final Setup ###
 
 # Add catkin ws
