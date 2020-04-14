@@ -24,8 +24,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     # Clear apt caches to reduce image size
     rm -rf /var/lib/apt/lists/*
 
+# Downgrade to pip version 8.1.1
+RUN python -m pip install pip==8.1.1
+
 # Get required python packages
 RUN pip install pyserial dependency-injector pillow==6
+
+# Install PyTorch and Torchvision
+COPY $TARGETPLATFORM/TorchInstaller.sh TorchInstaller.sh
+RUN ./TorchInstaller.sh && \
+    rm TorchInstaller.sh
+
+# Install Detecto
+RUN pip install --no-cache-dir --no-deps detecto 
 
 ### ROS Plugins and Dependencies###
 
