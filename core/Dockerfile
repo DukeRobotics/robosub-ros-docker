@@ -56,7 +56,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     sudo \
     usbutils \
     apt-utils \
-    python-setuptools \
     python-catkin-tools \
     locales && \
     apt-get clean && \
@@ -64,7 +63,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     rm -rf /var/lib/apt/lists/*
 
 # Install pip
-RUN easy_install pip==8.1.1
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python get-pip.py && \
+    python -m pip install pip==8.1.1 
 
 # Set up locales
 RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
