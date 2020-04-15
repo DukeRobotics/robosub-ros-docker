@@ -56,12 +56,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     sudo \
     usbutils \
     apt-utils \
+    python-setuptools \
     python-catkin-tools \
-    python-pip \
     locales && \
     apt-get clean && \
     # Clear apt caches to reduce image size
     rm -rf /var/lib/apt/lists/*
+
+# Install pip
+RUN easy_install pip==8.1.1
 
 # Set up locales
 RUN locale-gen en_GB.UTF-8 && locale-gen en_US.UTF-8
