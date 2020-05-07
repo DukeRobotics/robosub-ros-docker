@@ -27,7 +27,7 @@ jobs:
       - name: Setup environment and build
         run: |
           ./.github/workflows/build.sh
-      - name: Push image
+      - name: Push image to dockerhub
         if: github.event_name == 'push'
         run: |
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
@@ -69,7 +69,7 @@ jobs:
         run: |
           ./.github/workflows/build.sh
           ./.github/workflows/test.sh
-      - name: Push image
+      - name: Push image to dockerhub
         if: github.event_name == 'push'
         run: |
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
@@ -80,7 +80,7 @@ jobs:
     needs: onboard
     steps:
       - uses: actions/checkout@v2
-      - name: Push images to latest
+      - name: Push images to latest on dockerhub
         if: github.event_name == 'push'
         run: |
           ./.github/workflows/setup.sh
@@ -110,11 +110,10 @@ jobs:
           docker load < ./core/amd64-core.tar.gz
           rm -rf core
       - name: Setup environment and build
-        working-directory: 
         run: |
           cd landside
           docker build --build-arg BASE_IMAGE=${BASE_IMAGE} -t  ${IMAGE_NAME} .
-      - name: Push image
+      - name: Push image to dockerhub
         if: github.event_name == 'push'
         run: |
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
