@@ -31,9 +31,9 @@ jobs:
         run: |
           docker save ${IMAGE_NAME} | gzip > core-arm64.tar.gz
       - name: Create artifact from image
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
-          name: core-arm64
+          name: core
           path: core-arm64.tar.gz
 
   core-amd64:
@@ -57,9 +57,9 @@ jobs:
         run: |
           docker save ${IMAGE_NAME} | gzip > core-amd64.tar.gz
       - name: Create artifact from image
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
-          name: core-amd64
+          name: core
           path: core-amd64.tar.gz
 
   onboard-arm64:
@@ -73,12 +73,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Get core image
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with: 
-          name: core-arm64
+          name: core
+          path: core
       - name: Load core image
         run: |
-          docker load < ./core-arm64/core-arm64.tar.gz
+          docker load < ./core/core-arm64.tar.gz
           rm -rf core-arm64
       - name: Setup environment and build
         run: |
@@ -101,12 +102,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Get core image
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with: 
-          name: core-amd64
+          name: core
+          path: core
       - name: Load core image
         run: |
-          docker load < ./core-amd64/core-amd64.tar.gz
+          docker load < ./core/core-amd64.tar.gz
           rm -rf core-amd64
       - name: Setup environment and build
         run: |
@@ -144,12 +146,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2 
       - name: Get core image
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with: 
-          name: core-amd64
+          name: core
+          path: core
       - name: Load core image
         run: |
-          docker load < ./core-amd64/core-amd64.tar.gz
+          docker load < ./core/core-amd64.tar.gz
           rm -rf core-amd64
       - name: Setup environment and build
         working-directory: 
