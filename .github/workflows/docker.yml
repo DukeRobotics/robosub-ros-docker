@@ -10,109 +10,66 @@ on:
   pull_request:
 
 jobs:
-  core-arm64:
+  core:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [arm64, amd64]
+      fail-fast: false
     env:
-      IMAGE_NAME: dukerobotics/robosub-ros:core-arm64
-      TARGETPLATFORM: linux/arm64
+      IMAGE_NAME: 'dukerobotics/robosub-ros:core-${{ matrix.arch }}'
+      TARGETPLATFORM: 'linux/${{ matrix.arch }}'
       FOLDER_NAME: core
       BASE_IMAGE: dukerobotics/robosub-ros:base
+      FILE_NAME: '${{ matrix.arch }}-core.tar.gz'
     steps:
       - uses: actions/checkout@v2
       - name: Setup environment and build
         run: |
           ./.github/workflows/build.sh
-      - name: Push image
+      - name: Push image to dockerhub
         if: github.event_name == 'push'
         run: |
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
           docker push ${IMAGE_NAME}
       - name: Save image
         run: |
-          docker save ${IMAGE_NAME} | gzip > core-arm64.tar.gz
+          docker save ${IMAGE_NAME} | gzip > ${FILE_NAME}
       - name: Create artifact from image
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
-          name: core-arm64
-          path: core-arm64.tar.gz
+          name: core
+          path: ${{ env.FILE_NAME }}
 
-  core-amd64:
+  onboard:
     runs-on: ubuntu-latest
+    needs: core
+    strategy:
+      matrix:
+        arch: [arm64, amd64]
+      fail-fast: false
     env:
-      IMAGE_NAME: dukerobotics/robosub-ros:core-amd64
-      TARGETPLATFORM: linux/amd64
-      FOLDER_NAME: core
-      BASE_IMAGE: dukerobotics/robosub-ros:base
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup environment and build
-        run: |
-          ./.github/workflows/build.sh
-      - name: Push image
-        if: github.event_name == 'push'
-        run: |
-          echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
-          docker push ${IMAGE_NAME}
-      - name: Save image
-        run: |
-          docker save ${IMAGE_NAME} | gzip > core-amd64.tar.gz
-      - name: Create artifact from image
-        uses: actions/upload-artifact@v1
-        with:
-          name: core-amd64
-          path: core-amd64.tar.gz
-
-  onboard-arm64:
-    runs-on: ubuntu-latest
-    needs: core-arm64
-    env:
-      IMAGE_NAME: dukerobotics/robosub-ros:onboard-arm64
-      TARGETPLATFORM: linux/arm64
+      IMAGE_NAME: 'dukerobotics/robosub-ros:onboard-${{ matrix.arch }}'
+      TARGETPLATFORM: 'linux/${{ matrix.arch }}'
       FOLDER_NAME: onboard
-      BASE_IMAGE: dukerobotics/robosub-ros:core-arm64
+      BASE_IMAGE: 'dukerobotics/robosub-ros:core-${{ matrix.arch }}'
+      FILE_NAME: '${{ matrix.arch }}-core.tar.gz'
     steps:
       - uses: actions/checkout@v2
       - name: Get core image
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with: 
-          name: core-arm64
+          name: core
+          path: core
       - name: Load core image
         run: |
-          docker load < ./core-arm64/core-arm64.tar.gz
-          rm -rf core-arm64
+          docker load < ./core/${FILE_NAME}
+          rm -rf core
       - name: Setup environment and build
         run: |
           ./.github/workflows/build.sh
           ./.github/workflows/test.sh
-      - name: Push image
-        if: github.event_name == 'push'
-        run: |
-          echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
-          docker push ${IMAGE_NAME}
-
-  onboard-amd64:
-    runs-on: ubuntu-latest
-    needs: core-amd64
-    env:
-      IMAGE_NAME: dukerobotics/robosub-ros:onboard-amd64
-      TARGETPLATFORM: linux/amd64
-      FOLDER_NAME: onboard
-      BASE_IMAGE: dukerobotics/robosub-ros:core-amd64
-    steps:
-      - uses: actions/checkout@v2
-      - name: Get core image
-        uses: actions/download-artifact@v1
-        with: 
-          name: core-amd64
-      - name: Load core image
-        run: |
-          docker load < ./core-amd64/core-amd64.tar.gz
-          rm -rf core-amd64
-      - name: Setup environment and build
-        run: |
-          ./.github/workflows/build.sh
-          ./.github/workflows/test.sh
-      - name: Push image
+      - name: Push image to dockerhub
         if: github.event_name == 'push'
         run: |
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
@@ -120,10 +77,10 @@ jobs:
 
   push:
     runs-on: ubuntu-latest
-    needs: [onboard-arm64, onboard-amd64]
+    needs: onboard
     steps:
       - uses: actions/checkout@v2
-      - name: Push images to latest
+      - name: Push images to latest on dockerhub
         if: github.event_name == 'push'
         run: |
           ./.github/workflows/setup.sh
@@ -137,26 +94,26 @@ jobs:
   
   landside:
     runs-on: ubuntu-latest
-    needs: core-amd64
+    needs: core
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:landside
       BASE_IMAGE: dukerobotics/robosub-ros:core-amd64
     steps:
       - uses: actions/checkout@v2 
       - name: Get core image
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with: 
-          name: core-amd64
+          name: core
+          path: core
       - name: Load core image
         run: |
-          docker load < ./core-amd64/core-amd64.tar.gz
-          rm -rf core-amd64
+          docker load < ./core/amd64-core.tar.gz
+          rm -rf core
       - name: Setup environment and build
-        working-directory: 
         run: |
           cd landside
           docker build --build-arg BASE_IMAGE=${BASE_IMAGE} -t  ${IMAGE_NAME} .
-      - name: Push image
+      - name: Push image to dockerhub
         if: github.event_name == 'push'
         run: |
           echo "${{ secrets.DOCKER_BOT_TOKEN }}" | docker login -u dukeroboticsbot --password-stdin
