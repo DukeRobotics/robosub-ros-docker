@@ -68,6 +68,8 @@ jobs:
       - name: Setup environment and build
         run: |
           ./.github/workflows/build.sh
+      - name: Test build
+        run: |
           ./.github/workflows/test.sh
       - name: Push image to dockerhub
         if: github.event_name == 'push'
@@ -113,6 +115,9 @@ jobs:
         run: |
           cd landside
           docker build --build-arg BASE_IMAGE=${BASE_IMAGE} -t  ${IMAGE_NAME} .
+      - name: Test build
+        run: |
+          ./.github/workflows/test.sh
       - name: Push image to dockerhub
         if: github.event_name == 'push'
         run: |
