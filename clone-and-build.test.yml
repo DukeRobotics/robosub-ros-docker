@@ -1,7 +1,7 @@
 
 sut:
   image: ${IMAGE_NAME}
-  command: cd ~/dev && \
-           git clone https://github.com/DukeRobotics/robosub-ros.git && \
-           cd robosub-ros && \
-           ./build.sh ${COMPUTER_TYPE}
+  entrypoint: ["/bin/sh", "-c",  "cd ~/dev && \
+                                  git clone https://github.com/DukeRobotics/robosub-ros.git && \
+                                  cd robosub-ros && \
+                                  ./build.sh ${FOLDER_NAME}"]

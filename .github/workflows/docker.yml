@@ -100,6 +100,7 @@ jobs:
     env:
       IMAGE_NAME: dukerobotics/robosub-ros:landside
       BASE_IMAGE: dukerobotics/robosub-ros:core-amd64
+      FOLDER_NAME: landside
     steps:
       - uses: actions/checkout@v2 
       - name: Get core image
@@ -113,7 +114,7 @@ jobs:
           rm -rf core
       - name: Setup environment and build
         run: |
-          cd landside
+          cd ${FOLDER_NAME}
           docker build --build-arg BASE_IMAGE=${BASE_IMAGE} -t  ${IMAGE_NAME} .
       - name: Test build
         run: |
