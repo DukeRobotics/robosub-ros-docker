@@ -14,6 +14,8 @@ RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-melodic-geometry2 ros-melodic-rviz \
     ros-melodic-joy ros-melodic-rosbridge-suite \
+    ros-melodic-image-view ros-melodic-image-publisher \
+    ros-melodic-cv-bridge \
     xsltproc xauth && \
     apt-get clean && \
     # Clear apt caches to reduce image size
