@@ -1,9 +1,0 @@
-
-sut:
-  image: ${IMAGE_NAME}
-  command: sudo su duke
-           cd ~/dev && \
-           git clone https://github.com/DukeRobotics/robosub-ros.git && \
-           source /opt/ros/kinetic/setup.bash && \
-           cd robosub-ros/catkin_ws && \
-           catkin build

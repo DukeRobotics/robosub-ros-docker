@@ -1,0 +1,17 @@
+name: comment
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  dispatch_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch command
+        uses: peter-evans/slash-command-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          commands: docker-test
+          permission: read
+          issue-type: pull-request
