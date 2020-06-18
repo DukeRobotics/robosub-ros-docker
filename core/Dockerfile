@@ -57,6 +57,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     usbutils \
     apt-utils \
     python-catkin-tools \
+    ros-melodic-cv-bridge \ 
     locales && \
     apt-get clean && \
     # Clear apt caches to reduce image size
