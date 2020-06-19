@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python-numpy python-scipy python-future  \
     python-six python-dateutil python-skimage \
     python-pywt python-pandas \
-    ros-melodic-cv-bridge ros-melodic-tf \
+    ros-melodic-tf \
     ros-melodic-robot-localization  ros-melodic-libg2o \
     ros-melodic-pid ros-melodic-camera-info-manager-py \
     ros-melodic-rosserial ros-melodic-rosserial-arduino && \
