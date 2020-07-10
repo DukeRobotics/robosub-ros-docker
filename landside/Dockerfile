@@ -30,8 +30,8 @@ RUN wget coppeliarobotics.com/files/CoppeliaSim_Edu_V4_0_0_Ubuntu18_04.tar.xz &&
 ### Final Setup ###
 
 # Add script to setup multiple machines for pool testing
-COPY setup_pool.bash /opt/ros/melodic/setup_pool.bash
-RUN chmod +x /opt/ros/melodic/setup_pool.bash
+COPY setup_network.bash /opt/ros/melodic/setup_network.bash
+RUN chmod +x /opt/ros/melodic/setup_network.bash
 
 # Set computer type
 ENV COMPUTER_TYPE=landside
