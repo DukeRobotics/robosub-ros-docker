@@ -11,7 +11,7 @@ WORKDIR $WORKDIR
 ### ROS Installation ###
 
 # install packages
-RUN apt-get update && apt-get install -q -y \
+RUN apt-get update && apt-get install --no-install-recommends -q -y \
     dirmngr \
     gnupg2 \
     && rm -rf /var/lib/apt/lists/*
@@ -53,7 +53,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     vim \
     curl \
     wget \
-    sudo \
     usbutils \
     apt-utils \
     python-catkin-tools \

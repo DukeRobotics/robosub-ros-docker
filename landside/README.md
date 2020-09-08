@@ -1,6 +1,6 @@
 # Dockerfile Notes
 
-This image is run on the landside computer during a pool test. 
+This image is run on the landside computer during a pool test.
 
 ## Building
 

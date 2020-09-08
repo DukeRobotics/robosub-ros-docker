@@ -33,23 +33,23 @@ while [[ -n "$URL" ]]; do
     rm -f $TMPFILE
 
     # Number of artifacts on this page:
-    COUNT=$(( $(jq <<<$JSON -r '.artifacts | length') ))
+    COUNT=$(( $(jq <<<"$JSON" -r '.artifacts | length') ))
 
     # Loop on all artifacts on this page.
-    for ((i=0; $i < $COUNT; i++)); do
+    for ((i=0; i < COUNT; i++)); do
 
         # Get name of artifact and count instances of this name.
-        name=$(jq <<<$JSON -r ".artifacts[$i].name?")
+        name=$(jq <<<"$JSON" -r ".artifacts[$i].name?")
         ARTCOUNT[$name]=$(( $(( ${ARTCOUNT[$name]} )) + 1))
 
         # Check if we must delete this one.
         if [[ ${ARTCOUNT[$name]} -gt $KEEP ]]; then
-            id=$(jq <<<$JSON -r ".artifacts[$i].id?")
-            size=$(( $(jq <<<$JSON -r ".artifacts[$i].size_in_bytes?") ))
-            printf "Deleting '%s' #%d, %'d bytes\n" $name ${ARTCOUNT[$name]} $size
-            curl --user $GITHUB_USER:$GITHUB_TOKEN \
+            id=$(jq <<<"$JSON" -r ".artifacts[$i].id?")
+            size=$(( $(jq <<<"$JSON" -r ".artifacts[$i].size_in_bytes?") ))
+            printf "Deleting '%s' #%d, %'d bytes\n" "$name" ${ARTCOUNT[$name]} $size
+            curl --user "$GITHUB_USER":"$GITHUB_TOKEN" \
                  --request DELETE \
-                 --url $REPO/actions/artifacts/$id 
+                 --url "$REPO"/actions/artifacts/"$id" 
         fi
     done
 done
