@@ -16,6 +16,6 @@ Here is the process for adding dependencies:
 
 4. Once the automated builds have passed, you should test whether your images contains the dependencies for the branch in the code repository that contains your packages. You can do this by creating a comment on the PR you opened in this docker repository with the format `/docker-test <branch_name>` where `<branch_name>` is the branch in the code base that you would like to test against. For instance, to test against branch `cv` of the codebase, you would comment `/docker-test cv`. Please ensure that there is no other text in the comment, and to test multiple branches, you will have to make multiple comments. An example can be found [here](https://github.com/DukeRobotics/robosub-ros-docker/pull/48).
 
-5. The github bot will then add reactions to your comment, indicating that it has seen the request and has started the builds. Once the builds are done, a comment will be created on the PR by the github bot that will indicate whether all builds/tests passed.
+5. The GitHub bot will then add reactions to your comment, indicating that it has seen the request and has started the builds. Once the builds are done, a comment will be created on the PR by the GitHub bot that will indicate whether all builds/tests passed.
 
 6. You may merge the Pull Request in once you have the sign-off of one of the team leads, or if you do not have permission to do that, you may request the leads to merge it for you.
