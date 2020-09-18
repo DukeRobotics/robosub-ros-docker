@@ -1,3 +1,6 @@
+# Migration Notice
+**This repository's contents and function have been merged into the main [robosub-ros](https://github.com/DukeRobotics/robosub-ros) repo as of 9/16/2020. This repository remains archived for future reference, especially for viewing past commit history to understand how it was built from the ground up.**
+
 # Duke Robotics Club - RoboSub ROS Docker
 
 ![Build Status](https://github.com/dukerobotics/robosub-ros-docker/workflows/build/badge.svg)
